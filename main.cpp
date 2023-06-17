@@ -7,6 +7,6 @@ int main()
     cout << "Iniciando el curso ..." <<endl;
     cout << "Primer cambio " << endl;
     cout << "Segundo cambio " << endl;
-    cout <<" Tercer cambio "<<endl;
+    cout <<" Tercer cambio mejorado "<<endl;
     return 0;
 }
