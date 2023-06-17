@@ -1,12 +1,14 @@
 #include <iostream>
+#include "demo.h"
+// #include "array.h"
+
 using namespace std;
 
-// g++ -pthread -std=c++17 -o main main.cpp 
+// g++ -pthread -std=c++17 -o main main.cpp demo.cpp
 int main()
 {
-    cout << "Iniciando el curso ..." <<endl;
-    cout << "Primer cambio " << endl;
-    cout << "Segundo cambio " << endl;
-    cout <<" Tercer cambio mejorado "<<endl;
+    DemoArray();
+    DemoBinaryTree();
+    DemoHash();
     return 0;
 }
