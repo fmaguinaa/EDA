@@ -6,5 +6,6 @@ int main()
 {
     cout << "Iniciando el curso ..." <<endl;
     cout << "Primer cambio " << endl;
+    cout << "Segundo cambio " << endl;
     return 0;
 }
