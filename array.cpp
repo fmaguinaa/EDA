@@ -2,16 +2,46 @@
 #include "array.h"
 using namespace std;
 
-int v[100], vcount = 0;
+int *pVect = nullptr, vcount = 0, vmax = 0;
+
+void create_array(){
+    pVect   = nullptr;
+    vcount  = 0;
+    vmax    = 0;
+}
+
+void destroy_array(){
+    delete [] pVect;
+    pVect = nullptr;
+    vcount = 0;
+    vmax = 0;
+}
+
+void resize(){
+    int *pTemp = new int[vmax+10];
+    for(auto i = 0u ; i < vcount ; ++i)
+        pTemp[i]   = pVect[i];
+        // *(pTemp+i) = pVect[i];
+        // pTemp[i]   = *(pVect+i);
+        // *(pTemp+i) = *(pVect+i);
+        // *(i+pTemp) = pVect[i];
+        // i[pTemp]   = pVect[i];
+    delete [] pVect;
+    pVect = pTemp;
+    vmax +=10;
+    cout << "Vector resized vcount=" << vcount << " vmax=" << vmax << endl;
+}
 
 void insert(int val){
-    v[vcount] = val;
-    vcount++;
-    cout << "Val=" << val << "inserted" <<endl;
+    if(vcount == vmax) // Array is already full?
+        resize();
+    pVect[vcount++] = val;
+    cout << "Val=" << val << " inserted, vcount=" << vcount << " vmax=" << vmax << endl;
 }
 
 void print(){
     for(auto i = 0; i < vcount ; ++i )
-        cout << "v[" << i << "]=" << v[i] << endl;
-    vcount++;
+        cout << "pVect[" << i << "]=" << pVect[i] << endl;
+    cout << "vcount=" << vcount << " vmax=" << vmax << endl;
 }
+
