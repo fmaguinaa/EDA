@@ -6,9 +6,11 @@ using namespace std;
 void DemoArray()
 {
     cout << "Hello from DemoArray()" <<endl;
-    for(auto i = 0 ; i < 10 ; i++)
+    create_array();
+    for(auto i = 0 ; i < 15 ; i++)
         insert(i);
     print();
+    destroy_array();
 }
 
 void DemoBinaryTree()
