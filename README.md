@@ -1,16 +1,23 @@
 # MCC639B - Tópicos Especiales III: Algoritmos y Estructura de Datos
 
 ### Comandos GIT
-
-- git add . (Agrega los cambios realizados)
-- git commit -m " mensaje " (Confirma los cambios en una instancia)
-- __Ejemplo__ git commit -m "Dynamic Array"
-- git push (Envía los cambios al repositorio)
-- git pull (Obtiene los últimos cambios)
-- git checkout < rama > (Permite posicionarse en la < rama > seleccionada)
-- git remote add upstream https://github.com/ecuadros/EDA.git (Añade el repositorio original hacia tu maquina)
-- git fetch upstream (Trae el contenido de todas las ramas hacia tu maquina)
-- git branch --all (Lista todas las ramas)
+<hr>
+#### Como añadir cambios
+    git add .
+#### Confirmar cambios
+    git commit -m "mensaje" Ex. [git commit -m "Dynamic Array"]
+#### Publicar cambios al repositorio remoto
+    git push
+#### Obtener los cambios hacia el repositorio local
+    git pull (Obtiene los últimos cambios)
+#### Cambiar de rama
+    git checkout <rama> (Permite posicionarse en la < rama >  seleccionada)
+    Ex. git checkout Arrar-0
+#### Sincronizar fork con el repositorio local
+    git remote add upstream https://github.com/ecuadros/EDA.git (Añade el repositorio original hacia tu maquina)
+    git fetch upstream (Trae el contenido de todas las ramas hacia tu maquina)
+#### Lista todas las ramas
+    git branch --all (Lista todas las ramas)
 
   
 
