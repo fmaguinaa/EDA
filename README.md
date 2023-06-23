@@ -1,7 +1,6 @@
 # MCC639B - Tópicos Especiales III: Algoritmos y Estructura de Datos
 
 ### Comandos GIT
-<hr>
 #### Como añadir cambios
     git add .
 #### Confirmar cambios
