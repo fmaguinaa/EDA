@@ -2,7 +2,8 @@
 #include "array.h"
 using namespace std;
 
-int *pVect = nullptr, vcount = 0, vmax = 0;
+int *pVect = nullptr;
+int vcount = 0, vmax = 0;
 
 void create_array(){
     pVect   = nullptr;
