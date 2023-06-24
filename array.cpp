@@ -2,23 +2,20 @@
 #include "array.h"
 using namespace std;
 
-int *pVect = nullptr;
-int vcount = 0, vmax = 0;
-
-void create_array(){
+void create_array(int *&pVect, int &vcount, int &vmax){
     pVect   = nullptr;
     vcount  = 0;
     vmax    = 0;
 }
 
-void destroy_array(){
+void destroy_array(int *&pVect, int &vcount, int &vmax){
     delete [] pVect;
     pVect = nullptr;
     vcount = 0;
     vmax = 0;
 }
 
-void resize(){
+void resize(int *&pVect, int &vcount, int &vmax){
     int *pTemp = new int[vmax+10];
     for(auto i = 0u ; i < vcount ; ++i)
         pTemp[i]   = pVect[i];
@@ -30,19 +27,19 @@ void resize(){
     delete [] pVect;
     pVect = pTemp;
     vmax +=10;
-    cout << "Vector resized vcount=" << vcount << " vmax=" << vmax << endl;
+    // cout << "Vector resized vcount=" << vcount << " vmax=" << vmax << endl;
 }
 
-void insert(int val){
+void insert(int *&pVect, int &vcount, int &vmax, int val){
     if(vcount == vmax) // Array is already full?
-        resize();
+        resize(pVect, vcount, vmax);
     pVect[vcount++] = val;
     cout << "Val=" << val << " inserted, vcount=" << vcount << " vmax=" << vmax << endl;
 }
 
-void print(){
+void print(int *&pVect, int &vcount, int &vmax){
     for(auto i = 0; i < vcount ; ++i )
         cout << "pVect[" << i << "]=" << pVect[i] << endl;
-    cout << "vcount=" << vcount << " vmax=" << vmax << endl;
+    //cout << "vcount=" << vcount << " vmax=" << vmax << endl;
 }
 
