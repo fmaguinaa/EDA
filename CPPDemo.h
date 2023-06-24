@@ -2,5 +2,6 @@
 #define __CPPDemo_H__
 
 void DemoPreandPostIncrement();
+void DemoParameters();
 
 #endif

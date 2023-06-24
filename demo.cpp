@@ -8,9 +8,11 @@ void DemoArray()
     cout << "Hello from DemoArray()" <<endl;
     create_array();
     for(auto i = 0 ; i < 15 ; i++)
-        insert(i);
+        insert(i); 
     print();
     destroy_array();
+
+
 }
 
 void DemoBinaryTree()
