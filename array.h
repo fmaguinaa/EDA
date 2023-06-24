@@ -1,9 +1,14 @@
 #ifndef __ARRAY_H__
 #define __ARRAY_H__
 
-void create_array (int *&pVect, int &vcount, int &vmax);
-void insert       (int *&pVect, int &vcount, int &vmax, int val);
-void print        (int *&pVect, int &vcount, int &vmax);
-void destroy_array(int *&pVect, int &vcount, int &vmax);
+struct CArray{
+    int *pVect = nullptr;
+    int  vcount = 0, vmax = 0;
+};
+
+void create_array (CArray *pThis);
+void insert       (CArray *pThis, int val);
+void print        (CArray *pThis);
+void destroy_array(CArray *pThis);
 
 #endif // __ARRAY_H__
