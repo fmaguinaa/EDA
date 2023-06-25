@@ -3,15 +3,14 @@
 using namespace std;
 
 CArray::CArray(string name) 
-       : m_name(name), m_pVect(nullptr) {
-    m_vcount  = 0;
-    m_vmax    = 0;
+       : m_name(name){
 }
 
 CArray::CArray() : CArray("Empty") {
 }
 
 CArray::~CArray(){
+    cout << "Destroying " << m_name << "..." << endl;
     delete [] m_pVect;
     m_pVect = nullptr;
     m_vcount = 0;
