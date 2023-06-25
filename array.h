@@ -15,10 +15,11 @@ public:
     ~CArray();
     void insert       (int val);
     void resize       ();
-    void print        ();
+    void print        (ostream &os);
     
 };
 
+ostream & operator<<(ostream &os, CArray &obj);
 
 
 #endif // __ARRAY_H__
