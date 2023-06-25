@@ -1,14 +1,24 @@
 #ifndef __ARRAY_H__
 #define __ARRAY_H__
 
-struct CArray{
-    int *pVect = nullptr;
-    int  vcount = 0, vmax = 0;
+#include <iostream>
+using namespace std;
+
+class CArray{
+private:
+    int *m_pVect = nullptr;
+    int  m_vcount = 0, m_vmax = 0;
+    string m_name = "Empty";
+public:
+    CArray();
+    CArray(string name);   // Constructor
+    ~CArray();
+    void insert       (int val);
+    void resize       ();
+    void print        ();
+    
 };
 
-void create_array (CArray *pThis);
-void insert       (CArray *pThis, int val);
-void print        (CArray *pThis);
-void destroy_array(CArray *pThis);
+
 
 #endif // __ARRAY_H__

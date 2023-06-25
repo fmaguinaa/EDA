@@ -3,25 +3,30 @@
 #include "array.h"
 using namespace std;
 
-void DemoArray()
-{   
+void DemoArray(){   
     cout << "Hello from DemoArray()" <<endl;
     cout << "Vector #1()" <<endl;
-    CArray v1;
-    create_array(&v1);
+    CArray v1("Antonio"); 
     for(auto i = 0 ; i < 15 ; i++)
-        insert(&v1, i); 
+        v1.insert(i);   //  insert(&v1);
 
     cout << "Vector #2()" <<endl;
-    CArray v2;
-    create_array(&v2);
+    CArray v2("Cristian"), *pV3 = new CArray("Guiomar");
+    CArray &rA = *pV3;
     for(auto i = 0 ; i < 12 ; i++)
-        insert(&v2, i); 
+    {   v2.insert(i);
+        pV3->insert(i);
+        //  (*pv3).insert(i);
+        //  rA.insert(i);
+    }
     
-    print(&v1);
-    destroy_array(&v1);
-    print(&v2);
-    destroy_array(&v2);
+    v1.print();
+    v2.print();
+    // pV3->print();
+    // (*pV3).print();
+    // rA.print();
+    // pV3[0].print();
+    delete pV3;
 }
 
 void DemoBinaryTree()
