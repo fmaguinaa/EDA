@@ -24,7 +24,9 @@ void DemoArray(){
     }
     
     cout << v1; // v1.print(cout);
-    cout << v2 << "More text" << endl;
+    ostream &tmp = cout << v2 << "More text" << endl;
+    tmp << "Hola !!!" << endl;
+    cout << &tmp << "..." << &cout <<endl;
     // cout << x << f << y << endl;
     ofstream of("test.txt", ios::out);
     of << v2 << "Extra text here" << endl;
