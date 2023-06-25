@@ -5,4 +5,6 @@ void DemoArray();
 void DemoBinaryTree();
 void DemoHash();
 
+void DemoSmartPointers();
+
 #endif // __DEMO_H__

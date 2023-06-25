@@ -4,6 +4,19 @@
 #include "array.h"
 using namespace std;
 
+void DemoSmartPointers(){
+    CArray v2("Lucero"), *pX; //, *pV3 = new CArray("Luis");
+    shared_ptr<CArray> pV3(new CArray("Luis")), pV4;
+    pV4 = pV3;
+    CArray &rA = *pV3;
+    for(auto i = 0 ; i < 12 ; i++)
+    {   v2.insert(i);
+        pV3->insert(i);
+        //  (*pv3).insert(i);
+        //  rA.insert(i);
+    }
+}
+
 void DemoArray(){   
     cout << "Hello from DemoArray()" <<endl;
     cout << "Vector #1()" <<endl;
@@ -12,9 +25,7 @@ void DemoArray(){
         v1.insert(i);   //  insert(&v1);
 
     cout << "Vector #2()" <<endl;
-    CArray v2("Cristian Vera"), *pX; //, *pV3 = new CArray("Guiomar ABC");
-    shared_ptr<CArray> pV3(new CArray("Guiomar ABC")), pV4;
-    pV4 = pV3;
+    CArray v2("Cristian Vera"), *pV3 = new CArray("Guiomar ABC");
     CArray &rA = *pV3;
     for(auto i = 0 ; i < 12 ; i++)
     {   v2.insert(i);
