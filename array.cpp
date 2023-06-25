@@ -39,10 +39,15 @@ void CArray::insert(int val){
     cout << "Val=" << val << " inserted, m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
 }
 
-void CArray::print(){
-    cout << "Printing: " << m_name << endl;
+void CArray::print(ostream &os){
+    os << "Printing: " << m_name << endl;
     for(auto i = 0; i < m_vcount ; ++i )
-        cout << "m_pVect[" << i << "]=" << m_pVect[i] << endl;
-    //cout << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
+        os << "m_pVect[" << i << "]=" << m_pVect[i] << endl;
+    //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
+}
+
+ostream &operator<<(ostream &os, CArray &obj){
+    obj.print(os);
+    return os;
 }
 
