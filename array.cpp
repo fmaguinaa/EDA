@@ -2,44 +2,48 @@
 #include "array.h"
 using namespace std;
 
-void create_array(CArray *pThis){
-    pThis->pVect   = nullptr;
-    pThis->vcount  = 0;
-    pThis->vmax    = 0;
+CArray::CArray(string name) 
+       : m_name(name), m_pVect(nullptr) {
+    m_vcount  = 0;
+    m_vmax    = 0;
 }
 
-void destroy_array(CArray *pThis){
-    delete [] pThis->pVect;
-    pThis->pVect = nullptr;
-    pThis->vcount = 0;
-    pThis->vmax = 0;
+CArray::CArray() : CArray("Empty") {
 }
 
-void resize(CArray *pThis){
-    int *pTemp = new int[pThis->vmax+10];
-    for(auto i = 0u ; i < pThis->vcount ; ++i)
-        pTemp[i]   = pThis->pVect[i];
-        // *(pTemp+i) = pThis->pVect[i];
-        // pTemp[i]   = *(pThis->pVect+i);
-        // *(pTemp+i) = *(pThis->pVect+i);
-        // *(i+pTemp) = pThis->pVect[i];
-        // i[pTemp]   = pThis->pVect[i];
-    delete [] pThis->pVect;
-    pThis->pVect = pTemp;
-    pThis->vmax +=10;
-    // cout << "Vector resized vcount=" << vcount << " vmax=" << vmax << endl;
+CArray::~CArray(){
+    delete [] m_pVect;
+    m_pVect = nullptr;
+    m_vcount = 0;
+    m_vmax = 0;
 }
 
-void insert(CArray *pThis, int val){
-    if(pThis->vcount == pThis->vmax) // Array is already full?
-        resize(pThis);
-    pThis->pVect[pThis->vcount++] = val;
-    cout << "Val=" << val << " inserted, vcount=" << pThis->vcount << " vmax=" << pThis->vmax << endl;
+void CArray::resize(){
+    int *pTemp = new int[m_vmax+10];
+    for(auto i = 0u ; i < m_vcount ; ++i)
+        pTemp[i]   = m_pVect[i];
+        // *(pTemp+i) = m_pVect[i];
+        // pTemp[i]   = *(m_pVect+i);
+        // *(pTemp+i) = *(m_pVect+i);
+        // *(i+pTemp) = m_pVect[i];
+        // i[pTemp]   = m_pVect[i];
+    delete [] m_pVect;
+    m_pVect = pTemp;
+    m_vmax +=10;
+    // cout << "Vector resized m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
 }
 
-void print(CArray *pThis){
-    for(auto i = 0; i < pThis->vcount ; ++i )
-        cout << "pVect[" << i << "]=" << pThis->pVect[i] << endl;
-    //cout << "vcount=" << pThis->vcount << " vmax=" << vmax << endl;
+void CArray::insert(int val){
+    if(m_vcount == m_vmax) // Array is already full?
+        resize();
+    m_pVect[m_vcount++] = val;
+    cout << "Val=" << val << " inserted, m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
+}
+
+void CArray::print(){
+    cout << "Printing: " << m_name << endl;
+    for(auto i = 0; i < m_vcount ; ++i )
+        cout << "m_pVect[" << i << "]=" << m_pVect[i] << endl;
+    //cout << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
 }
 
