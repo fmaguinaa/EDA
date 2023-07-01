@@ -1,14 +1,14 @@
-Printing: Cristian Vera
-m_pVect[0]=0
-m_pVect[1]=1
-m_pVect[2]=2
-m_pVect[3]=3
-m_pVect[4]=4
-m_pVect[5]=5
-m_pVect[6]=6
-m_pVect[7]=7
-m_pVect[8]=8
-m_pVect[9]=9
-m_pVect[10]=10
-m_pVect[11]=11
-Extra text here
+12 20
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+

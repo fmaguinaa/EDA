@@ -40,9 +40,10 @@ void CArray::insert(int val){
 }
 
 void CArray::print(ostream &os){
-    os << "Printing: " << m_name << endl;
+    // os << "Printing: " << m_name << endl;
+    os << m_vcount << " " << m_vmax << endl;
     for(auto i = 0; i < m_vcount ; ++i )
-        os << "m_pVect[" << i << "]=" << m_pVect[i] << endl;
+        os << m_pVect[i] << endl;
     //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
 }
 
