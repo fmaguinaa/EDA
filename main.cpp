@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// g++ -pthread -std=c++17 -o main main.cpp demo.cpp array.cpp CPPDemo.cpp
+// g++ -pthread -std=c++17 -o main main.cpp demo.cpp CPPDemo.cpp
 int main()
 {
     // DemoParameters();

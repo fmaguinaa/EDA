@@ -4,6 +4,9 @@
         "string": "cpp",
         "filesystem": "cpp",
         "iosfwd": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "typeindex": "cpp",
+        "typeinfo": "cpp",
+        "chrono": "cpp"
     }
 }
