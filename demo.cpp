@@ -33,14 +33,13 @@ void DemoArray(){
         //  (*pv3).insert(i);
         //  rA.insert(i);
     }
-    
     cout << v1; // v1.print(cout);
     ostream &tmp = cout << v2 << "More text" << endl;
     tmp << "Hola !!!" << endl;
     cout << &tmp << "..." << &cout <<endl;
     // cout << x << f << y << endl;
     ofstream of("test.txt", ios::out);
-    of << v2 << "Extra text here" << endl;
+    of << v2 << endl; 
     pV3->print(cout);
     // (*pV3).print();     *pV3 is already an object
     // rA.print();          rA is also an object
