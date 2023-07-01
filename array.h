@@ -16,7 +16,10 @@ public:
     void insert       (int val);
     void resize       ();
     void print        (ostream &os);
-    
+    int size()
+    {  return m_vcount;    }
+    int &operator[](int pos)
+    {   return m_pVect[pos];    }
 };
 
 ostream & operator<<(ostream &os, CArray &obj);
