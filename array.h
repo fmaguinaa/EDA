@@ -6,23 +6,28 @@ using namespace std;
 
 class CArray{
 private:
-    int *m_pVect = nullptr;
-    int  m_vcount = 0, m_vmax = 0;
+    //typedef typename Traits::T          value_type;
+    typedef int value_type;
+    value_type *m_pVect = nullptr;
+    size_t  m_vcount = 0, m_vmax = 0;
     string m_name = "Empty";
 public:
     CArray();
     CArray(string name);   // Constructor
     ~CArray();
-    void insert       (int val);
+    void insert       (value_type val);
     void resize       ();
     void print        (ostream &os);
-    int size()
+    size_t size()
     {  return m_vcount;    }
-    int &operator[](int pos)
+    value_type &operator[](size_t pos)
     {   return m_pVect[pos];    }
 };
 
 ostream & operator<<(ostream &os, CArray &obj);
+
+// TODO
+istream & operator<<(istream &is, CArray &obj);
 
 
 #endif // __ARRAY_H__

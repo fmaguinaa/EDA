@@ -18,8 +18,8 @@ CArray::~CArray(){
 }
 
 void CArray::resize(){
-    int *pTemp = new int[m_vmax+10];
-    for(auto i = 0u ; i < m_vcount ; ++i)
+    value_type *pTemp = new value_type[m_vmax+10];
+    for(size_t i = 0 ; i < m_vcount ; ++i)
         pTemp[i]   = m_pVect[i];
         // *(pTemp+i) = m_pVect[i];
         // pTemp[i]   = *(m_pVect+i);
@@ -32,7 +32,7 @@ void CArray::resize(){
     // cout << "Vector resized m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
 }
 
-void CArray::insert(int val){
+void CArray::insert(value_type val){
     if(m_vcount == m_vmax) // Array is already full?
         resize();
     m_pVect[m_vcount++] = val;
@@ -42,7 +42,7 @@ void CArray::insert(int val){
 void CArray::print(ostream &os){
     // os << "Printing: " << m_name << endl;
     os << m_vcount << " " << m_vmax << endl;
-    for(auto i = 0; i < m_vcount ; ++i )
+    for(size_t i = 0; i < m_vcount ; ++i )
         os << m_pVect[i] << endl;
     //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
 }
