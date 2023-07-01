@@ -1,17 +1,18 @@
 #include <iostream> // cout
 #include <fstream>  // ofstream, ifstream
+#include <cmath>
 #include "demo.h"
 #include "array.h"
 using namespace std;
 
 void DemoSmartPointers(){
-    CArray v2("Lucero"), *pX; //, *pV3 = new CArray("Luis");
-    shared_ptr<CArray> pV3(new CArray("Luis")), pV4;
+    CArray<int> v2("Lucero"), *pX; //, *pV3 = new CArray("Luis");
+    shared_ptr< CArray<float> > pV3(new CArray<float>("Luis")), pV4;
     pV4 = pV3;
-    CArray &rA = *pV3;
-    for(auto i = 0 ; i < 12 ; i++)
+    auto &rA = *pV3;
+    for(auto i = 100 ; i < 112 ; i++)
     {   v2.insert(i);
-        pV3->insert(i);
+        pV3->insert(sqrt(i));
         //  (*pv3).insert(i);
         //  rA.insert(i);
     }
@@ -20,15 +21,15 @@ void DemoSmartPointers(){
 void DemoArray(){   
     cout << "Hello from DemoArray()" <<endl;
     cout << "Vector #1()" <<endl;
-    CArray v1("Antonio"); 
+    CArray<int> v1("Antonio"); 
     for(auto i = 0 ; i < 15 ; i++)
         v1.insert(i);   //  insert(&v1);
 
     cout << "Vector #2()" <<endl;
-    CArray v2("Cristian Vera"), *pV3 = new CArray("Guiomar ABC");
-    CArray &rA = *pV3;
-    for(auto i = 0 ; i < 12 ; i++)
-    {   v2.insert(i);
+    CArray<float> v2("Cristian Vera"), *pV3 = new CArray<float>("Guiomar ABC");
+    auto &rA = *pV3;
+    for(auto i = 100 ; i < 112 ; i++)
+    {   v2.insert(sqrt(i));
         pV3->insert(i);
         //  (*pv3).insert(i);
         //  rA.insert(i);
@@ -48,8 +49,6 @@ void DemoArray(){
     // delete pV3;
 
     // Using an array with []
-    int x = v2[5] + 20;
-    v2[5] = 60;
     for(auto i = 0 ; i < v2.size() ; i++)
         cout << "v2[" << i << "] = " << v2[i] << endl;
     ofstream of("test.txt", ios::out);
