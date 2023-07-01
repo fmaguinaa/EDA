@@ -38,8 +38,6 @@ void DemoArray(){
     tmp << "Hola !!!" << endl;
     cout << &tmp << "..." << &cout <<endl;
     // cout << x << f << y << endl;
-    ofstream of("test.txt", ios::out);
-    of << v2 << endl; 
     pV3->print(cout);
     // (*pV3).print();     *pV3 is already an object
     // rA.print();          rA is also an object
@@ -48,6 +46,14 @@ void DemoArray(){
     // (*(0+pV3)).print();
     // 0[pV3].print();
     // delete pV3;
+
+    // Using an array with []
+    int x = v2[5] + 20;
+    v2[5] = 60;
+    for(auto i = 0 ; i < v2.size() ; i++)
+        cout << "v2[" << i << "] = " << v2[i] << endl;
+    ofstream of("test.txt", ios::out);
+    of << v2 << endl; 
 }
 
 void DemoBinaryTree()
