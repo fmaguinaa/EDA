@@ -32,3 +32,5 @@
 *.app
 main
 .DS_Store
+
+.vscode/*.json

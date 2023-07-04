@@ -1,6 +1,7 @@
 #include <iostream> // cout
 #include <fstream>  // ofstream, ifstream
 #include <cmath>
+#include <memory>
 #include "demo.h"
 #include "array.h"
 using namespace std;
@@ -53,6 +54,17 @@ void DemoArray(){
         cout << "v2[" << i << "] = " << v2[i] << endl;
     ofstream of("test.txt", ios::out);
     of << v2 << endl; 
+}
+
+void DemoArrayTemplates()
+{
+    ifstream input("input.txt");
+    CArray<int> *v = new CArray<int>("Franz");
+    input >> *v;
+
+    ofstream output("output.txt");
+    output << *v << endl;
+    cout << *v << endl;
 }
 
 void DemoBinaryTree()
