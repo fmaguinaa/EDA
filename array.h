@@ -69,7 +69,7 @@ istream &operator>>(istream &is, CArray<T> &obj)
 {
     size_t vcount;
     is >> vcount;
-    while (vcount-- > 0)
+    while (vcount--)
     {
         T value;
         is >> value;
