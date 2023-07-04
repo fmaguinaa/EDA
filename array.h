@@ -71,7 +71,6 @@ istream &operator>>(istream &is, CArray<T> &obj)
     is >> vcount;
     while (vcount-- > 0)
     {
-        cout << vcount;
         T value;
         is >> value;
         obj.insert(value);
