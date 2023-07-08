@@ -6,13 +6,13 @@
 using namespace std;
 
 void DemoSmartPointers(){
-    CArray< ArrayTrait<int> > v2("Lucero"), *pX; //, *pV3 = new CArray("Luis");
-    shared_ptr< CArray< ArrayTrait<float> > > pV3(new CArray<ArrayTrait<float> >("Luis")), pV4;
+    CArray< ArrayTrait<int, int> > v2("Lucero"), *pX; //, *pV3 = new CArray("Luis");
+    shared_ptr< CArray< ArrayTrait<float, string> > > pV3(new CArray<ArrayTrait<float, string> >("Luis")), pV4;
     pV4 = pV3;
     auto &rA = *pV3;
     for(auto i = 100 ; i < 112 ; i++)
-    {   v2.insert(i);
-        pV3->insert(sqrt(i));
+    {   v2.insert(i, i*i);
+        pV3->insert(sqrt(i), to_string(sqrt(i)+5));
         //  (*pv3).insert(i);
         //  rA.insert(i);
     }
@@ -22,16 +22,17 @@ void DemoArray(){
     cout << "Hello from DemoArray()" <<endl;
     cout << "Vector #1()" <<endl;
     
-    CArray< ArrayTrait<int> > v1("Antonio"); 
+    CArray< ArrayTrait<int, int> > v1("Antonio"); 
     for(auto i = 0 ; i < 15 ; i++)
-        v1.insert(i);   //  insert(&v1);
+        v1.insert(i, i+5);   //  insert(&v1);
 
     cout << "Vector #2()" <<endl;
-    CArray< ArrayTrait<float> > v2("Cristian Vera"), *pV3 = new CArray< ArrayTrait<float> >("Guiomar ABC");
+    CArray< ArrayTrait<float, long> > v2("Cristian Vera"), 
+           *pV3 = new CArray< ArrayTrait<float, long> >("Guiomar ABC");
     auto &rA = *pV3;
     for(auto i = 100 ; i < 112 ; i++)
-    {   v2.insert(sqrt(i));
-        pV3->insert(i);
+    {   v2.insert(sqrt(i), i);
+        pV3->insert(i, sqrt(i));
         //  (*pv3).insert(i);
         //  rA.insert(i);
     }
@@ -51,7 +52,7 @@ void DemoArray(){
 
     // Using an array with []
     for(auto i = 0 ; i < v2.size() ; i++)
-        cout << "v2[" << i << "] = " << v2[i] << endl;
+        cout << "v2[" << i << "] = " << v2[i].getKey() << endl;
     ofstream of("test.txt", ios::out);
     of << v2 << endl; 
     cout << "DemoArray finished !" << endl;
