@@ -6,8 +6,8 @@
 using namespace std;
 
 void DemoSmartPointers(){
-    CArray<int> v2("Lucero"), *pX; //, *pV3 = new CArray("Luis");
-    shared_ptr< CArray<float> > pV3(new CArray<float>("Luis")), pV4;
+    CArray< ArrayTrait<int> > v2("Lucero"), *pX; //, *pV3 = new CArray("Luis");
+    shared_ptr< CArray< ArrayTrait<float> > > pV3(new CArray<ArrayTrait<float> >("Luis")), pV4;
     pV4 = pV3;
     auto &rA = *pV3;
     for(auto i = 100 ; i < 112 ; i++)
@@ -21,12 +21,13 @@ void DemoSmartPointers(){
 void DemoArray(){   
     cout << "Hello from DemoArray()" <<endl;
     cout << "Vector #1()" <<endl;
-    CArray<int> v1("Antonio"); 
+    
+    CArray< ArrayTrait<int> > v1("Antonio"); 
     for(auto i = 0 ; i < 15 ; i++)
         v1.insert(i);   //  insert(&v1);
 
     cout << "Vector #2()" <<endl;
-    CArray<float> v2("Cristian Vera"), *pV3 = new CArray<float>("Guiomar ABC");
+    CArray< ArrayTrait<float> > v2("Cristian Vera"), *pV3 = new CArray< ArrayTrait<float> >("Guiomar ABC");
     auto &rA = *pV3;
     for(auto i = 100 ; i < 112 ; i++)
     {   v2.insert(sqrt(i));
@@ -53,6 +54,7 @@ void DemoArray(){
         cout << "v2[" << i << "] = " << v2[i] << endl;
     ofstream of("test.txt", ios::out);
     of << v2 << endl; 
+    cout << "DemoArray finished !" << endl;
 }
 
 void DemoBinaryTree()
