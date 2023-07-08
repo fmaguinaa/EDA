@@ -13,53 +13,74 @@ public:
   using ValueType = V;
 private:
   using Node      = NodeArray<T, V> ;
-  public:
+public:
     KeyType       m_key;
     ValueType      m_value;
-  public:
+
+public:
     NodeArray(KeyType key, ValueType value) 
-        : m_key(key), m_value(value)
-    {};
-    NodeArray(){}
-    KeyType         getKey()                {   return m_key;    }
-    KeyType        &getKeyRef()             {   return m_key;    }
-    ValueType       getValue()               {   return m_value;   }
-    ValueType      &getValueRef()            {   return m_value;   }
+        : m_key(key), m_value(value) {}
+
+    NodeArray(const NodeArray<T, V>& other) : 
+        NodeArray(other.m_key, other.m_value) {}
+
+    NodeArray(NodeArray<T, V>&& other) // Move constructor
+        : m_key  (std::move(other.m_key)), 
+          m_value(std::move(other.m_value)) {}
+    NodeArray() {}
+
+    NodeArray& operator=(const NodeArray& other) {
+        if (this != &other) {
+            m_key = other.m_key;
+            m_value = other.m_value;
+        }
+        return *this;
+    }
+
+    KeyType    getKey() const   { return m_key; }
+    KeyType&   getKeyRef()      { return m_key; }
+    ValueType  getValue() const { return m_value; }
+    ValueType& getValueRef()    { return m_value; }
+
+    bool operator<(const NodeArray<T, V>& other) const { 
+        return m_key < other.m_key;
+    }
+    // Error was here. Next line was missing
+    bool operator>(const NodeArray<T, V>& other) const { 
+        return m_key > other.m_key;
+    }
 };
+
 template <typename Node>
 bool xless (Node &obj1, Node &obj2) 
 { return (obj1.getKey() < obj2.getKey()); }
 
-template <typename Node>
-bool xgreater (Node &obj1, Node &obj2) 
-{ return (obj1.getKey() > obj2.getKey()); }
-
-template <typename _K, typename _V>
+template <typename _K, typename _V, 
+            typename _CompareFn = std::less< NodeArray<_K, _V> & >>
 struct ArrayTrait
 {
-    using  T         = _K;
+    using  KeyType   = _K;
     using  ValueType = _V;
     using  Node      = NodeArray<_K, _V>;
-    using  CompareFn = ::xless<Node>;
+    using  CompareFn = _CompareFn;
 };
 
 using TraitArrayFloatString = ArrayTrait<float, string>;
-using TraitArrayIntInt      = ArrayTrait<int, int>;
-using TraitFloatLong        = ArrayTrait<float, long>;
+using TraitArrayIntInt      = ArrayTrait<int  , int   , std::greater<NodeArray<int  , int > &>>;
+using TraitFloatLong        = ArrayTrait<float, long  , std::greater<NodeArray<float, long> &>>;
 
 // Created by: @ecuadros
 template <typename Traits>
 class CArray{
 private:
-    using KeyType   = typename Traits::T;
+    using KeyType   = typename Traits::KeyType;
     using ValueType = typename Traits::ValueType ;
     using Node      = typename Traits::Node;
     using CompareFn = typename Traits::CompareFn;
 
-    Node   *m_pVect = nullptr;
-    size_t  m_vcount = 0, m_vmax = 0;
-    string  m_name = "Empty";
-    CompareFn m_CompareFn;
+    Node     *m_pVect = nullptr;
+    size_t    m_vcount = 0, m_vmax = 0;
+    string    m_name = "Empty";
 public:
     CArray(): m_name("Empty"){}
     CArray(string name) : m_name(name) {}
@@ -80,10 +101,12 @@ public:
         m_vcount = 0;
         m_vmax = 0;
     }
+    
     void print        (ostream &os){
         // os << "Printing: " << m_name << endl;
         os << m_vcount << " " << m_vmax << endl;
-        //sort(m_pVect, m_pVect+m_vcount, m_CompareFn);
+        sort(m_pVect, m_pVect+m_vcount, CompareFn() );
+        // sort(m_pVect, m_pVect+m_vcount, std::less<Node>());
         for(size_t i = 0; i < m_vcount ; ++i )
             os << m_pVect[i].getKey() << "\t: " << m_pVect[i].getValue() << endl;
         //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
