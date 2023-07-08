@@ -18,7 +18,7 @@ void DemoSmartPointers(){
         //  rA.insert(i);
     }
     cout << "Printing pV3 float -> string" << endl;
-    cout << rA ;
+    cout << *pV3 ;
 }
 
 void DemoArray(){   
