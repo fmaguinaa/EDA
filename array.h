@@ -2,6 +2,7 @@
 #define __ARRAY_H__
 
 #include <iostream>
+#include <algorithm> // sort algorithm
 using namespace std;
 
 template <typename T, typename V>
@@ -25,6 +26,13 @@ private:
     ValueType       getValue()               {   return m_value;   }
     ValueType      &getValueRef()            {   return m_value;   }
 };
+template <typename Node>
+bool xless (Node &obj1, Node &obj2) 
+{ return (obj1.getKey() < obj2.getKey()); }
+
+template <typename Node>
+bool xgreater (Node &obj1, Node &obj2) 
+{ return (obj1.getKey() > obj2.getKey()); }
 
 template <typename _K, typename _V>
 struct ArrayTrait
@@ -32,7 +40,7 @@ struct ArrayTrait
     using  T         = _K;
     using  ValueType = _V;
     using  Node      = NodeArray<_K, _V>;
-    //using  CompareFn = less<T>;
+    using  CompareFn = xless<Node>;
 };
 
 using TraitArrayFloatString = ArrayTrait<float, string>;
@@ -46,10 +54,12 @@ private:
     using KeyType   = typename Traits::T;
     using ValueType = typename Traits::ValueType ;
     using Node      = typename Traits::Node;
+    using CompareFn = typename Traits::CompareFn;
 
     Node   *m_pVect = nullptr;
     size_t  m_vcount = 0, m_vmax = 0;
     string  m_name = "Empty";
+    CompareFn m_CompareFn;
 public:
     CArray(): m_name("Empty"){}
     CArray(string name) : m_name(name) {}
@@ -73,6 +83,7 @@ public:
     void print        (ostream &os){
         // os << "Printing: " << m_name << endl;
         os << m_vcount << " " << m_vmax << endl;
+        sort(m_pVect, m_pVect+m_vcount, m_CompareFn);
         for(size_t i = 0; i < m_vcount ; ++i )
             os << m_pVect[i].getKey() << "\t: " << m_pVect[i].getValue() << endl;
         //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
