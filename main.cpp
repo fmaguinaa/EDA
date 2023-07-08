@@ -14,6 +14,6 @@ int main()
     // DemoHash();
 
     // DemoPreandPostIncrement();
-    // DemoSmartPointers();
+    DemoSmartPointers();
     return 0;
 }

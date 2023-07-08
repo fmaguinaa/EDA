@@ -8,10 +8,10 @@ template <typename T, typename V>
 class NodeArray
 {
 public:
-  typedef T     KeyType;
-  typedef V     ValueType;
+  using KeyType   = T;
+  using ValueType = V;
 private:
-  typedef NodeArray<T, V> Node;
+  using Node      = NodeArray<T, V> ;
   public:
     KeyType       m_key;
     ValueType      m_value;
@@ -35,15 +35,18 @@ struct ArrayTrait
     //using  CompareFn = less<T>;
 };
 
+using TraitArrayFloatString = ArrayTrait<float, string>;
+using TraitArrayIntInt      = ArrayTrait<int, int>;
+using TraitFloatLong        = ArrayTrait<float, long>;
+
 // Created by: @ecuadros
 template <typename Traits>
 class CArray{
 private:
-    typedef typename Traits::T          KeyType;
-    typedef typename Traits::ValueType  ValueType;
-    typedef typename Traits::Node       Node;
+    using KeyType   = typename Traits::T;
+    using ValueType = typename Traits::ValueType ;
+    using Node      = typename Traits::Node;
 
-    // typedef T KeyType;
     Node   *m_pVect = nullptr;
     size_t  m_vcount = 0, m_vmax = 0;
     string  m_name = "Empty";
@@ -58,7 +61,7 @@ public:
         if(m_vcount == m_vmax) // Array is already full?
             resize();
         m_pVect[m_vcount++] = Node(key, value);
-        cout << "Key=" << key << " Value=" << value << "inserted, m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
+        // cout << "Key=" << key << " Value=" << value << "\tinserted, m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
     }
     void resize       ();
     void reset(){
@@ -71,7 +74,7 @@ public:
         // os << "Printing: " << m_name << endl;
         os << m_vcount << " " << m_vmax << endl;
         for(size_t i = 0; i < m_vcount ; ++i )
-            os << m_pVect[i].getKey() << endl;
+            os << m_pVect[i].getKey() << "\t: " << m_pVect[i].getValue() << endl;
         //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
     }
     void read(istream &is){

@@ -7,28 +7,31 @@ using namespace std;
 
 void DemoSmartPointers(){
     CArray< ArrayTrait<int, int> > v2("Lucero"), *pX; //, *pV3 = new CArray("Luis");
-    shared_ptr< CArray< ArrayTrait<float, string> > > pV3(new CArray<ArrayTrait<float, string> >("Luis")), pV4;
+    
+    shared_ptr< CArray< TraitArrayFloatString > > pV3(new CArray< TraitArrayFloatString >("Luis")), pV4;
     pV4 = pV3;
     auto &rA = *pV3;
     for(auto i = 100 ; i < 112 ; i++)
     {   v2.insert(i, i*i);
-        pV3->insert(sqrt(i), to_string(sqrt(i)+5));
+        pV3->insert(sqrt(i), string("**")+to_string(sqrt(i)+5)+string("**"));
         //  (*pv3).insert(i);
         //  rA.insert(i);
     }
+    cout << "Printing pV3 float -> string" << endl;
+    cout << rA ;
 }
 
 void DemoArray(){   
     cout << "Hello from DemoArray()" <<endl;
     cout << "Vector #1()" <<endl;
     
-    CArray< ArrayTrait<int, int> > v1("Antonio"); 
+    CArray< TraitArrayIntInt > v1("Antonio"); 
     for(auto i = 0 ; i < 15 ; i++)
         v1.insert(i, i+5);   //  insert(&v1);
 
     cout << "Vector #2()" <<endl;
-    CArray< ArrayTrait<float, long> > v2("Cristian Vera"), 
-           *pV3 = new CArray< ArrayTrait<float, long> >("Guiomar ABC");
+    CArray< TraitFloatLong > v2("Cristian Vera"), 
+           *pV3 = new CArray< TraitFloatLong >("Guiomar ABC");
     auto &rA = *pV3;
     for(auto i = 100 ; i < 112 ; i++)
     {   v2.insert(sqrt(i), i);
