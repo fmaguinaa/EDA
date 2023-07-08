@@ -4,11 +4,19 @@
 #include <iostream>
 using namespace std;
 
-template <typename T>
+template <typename _T>
+struct ArrayTrait
+{
+    using  T         = _T;
+    //using  Node      = NodeLE<T>;
+    //using  CompareFn = less<T>;
+};
+
+template <typename Traits>
 class CArray{
 private:
-    // typedef typename Traits::T          value_type;
-    typedef T value_type;
+    typedef typename Traits::T          value_type;
+    // typedef T value_type;
     value_type *m_pVect = nullptr;
     size_t  m_vcount = 0, m_vmax = 0;
     string  m_name = "Empty";
@@ -42,8 +50,8 @@ public:
     {   return m_pVect[pos];    }
 };
 
-template <typename T>
-void CArray<T>::resize(){
+template <typename Traits>
+void CArray<Traits>::resize(){
     value_type *pTemp = new value_type[m_vmax+10];
     for(size_t i = 0 ; i < m_vcount ; ++i)
         pTemp[i]   = m_pVect[i];
