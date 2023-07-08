@@ -13,12 +13,13 @@ public:
 private:
   typedef NodeArray<T, V> Node;
   public:
-    DataType       m_key;
+    KeyType       m_key;
     ValueType      m_value;
   public:
     NodeArray(KeyType key, ValueType value) 
         : m_key(key), m_value(value)
     {};
+    NodeArray(){}
     KeyType         getKey()                {   return m_key;    }
     KeyType        &getKeyRef()             {   return m_key;    }
     ValueType       getValue()               {   return m_value;   }
