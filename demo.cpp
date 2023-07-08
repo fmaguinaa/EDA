@@ -6,7 +6,7 @@
 using namespace std;
 
 void DemoSmartPointers(){
-    CArray< ArrayTrait<int, int> > v2("Lucero"), *pX; //, *pV3 = new CArray("Luis");
+    CArray< TraitArrayIntInt > v2("Lucero"), *pX; //, *pV3 = new CArray("Luis");
     
     shared_ptr< CArray< TraitArrayFloatString > > pV3(new CArray< TraitArrayFloatString >("Luis")), pV4;
     pV4 = pV3;
@@ -17,7 +17,7 @@ void DemoSmartPointers(){
         //  (*pv3).insert(i);
         //  rA.insert(i);
     }
-    cout << "Printing pV3 float -> string" << endl;
+    cout << "Printing pV3 float -> string (greater)" << endl;
     cout << *pV3 ;
 }
 
@@ -39,11 +39,16 @@ void DemoArray(){
         //  (*pv3).insert(i);
         //  rA.insert(i);
     }
+    cout << "Printing V1 (TraitArrayIntInt)" << endl;
     cout << v1; // v1.print(cout);
+
+    cout << "Printing V2 (TraitFloatLong)" << endl;
     ostream &tmp = cout << v2 << "More text" << endl;
     tmp << "Hola !!!" << endl;
     cout << &tmp << "..." << &cout <<endl;
     // cout << x << f << y << endl;
+
+    cout << "Printing pv3 (TraitFloatLong)" << endl;
     pV3->print(cout);
     // (*pV3).print();     *pV3 is already an object
     // rA.print();          rA is also an object
@@ -59,10 +64,20 @@ void DemoArray(){
     ofstream of("test.txt", ios::out);
     of << v2 << endl; 
     cout << "DemoArray finished !" << endl;
+
+    using TraitStringString = ArrayTrait<string, string  , std::less<NodeArray<string, string> &>>;
+    CArray< TraitStringString > vx("Ernesto Cuadros");
+    vx.insert("Ernesto", "Cuadros");
+    vx.insert("Luis"   , "Tejada");
+    vx.insert("Jorge"  , "Lozano");
+    vx.insert("Edson"  , "Caceres");
+    vx.insert("Franz"  , "Maguiña");
+    vx.print(cout);
 }
 
 void DemoBinaryTree()
 {
+
     cout << "Hello from DemoBinaryTree()" <<endl;
 }
 
