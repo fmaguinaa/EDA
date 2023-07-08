@@ -81,7 +81,7 @@ public:
     size_t size()
     {  return m_vcount;    }
     KeyType &operator[](size_t pos)
-    {   return m_pVect[pos].getKey();    }
+    {   return m_pVect[pos].getKeyRef();    }
 };
 
 template <typename Traits>
