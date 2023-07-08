@@ -40,7 +40,7 @@ struct ArrayTrait
     using  T         = _K;
     using  ValueType = _V;
     using  Node      = NodeArray<_K, _V>;
-    using  CompareFn = xless<Node>;
+    using  CompareFn = ::xless<Node>;
 };
 
 using TraitArrayFloatString = ArrayTrait<float, string>;
@@ -83,7 +83,7 @@ public:
     void print        (ostream &os){
         // os << "Printing: " << m_name << endl;
         os << m_vcount << " " << m_vmax << endl;
-        sort(m_pVect, m_pVect+m_vcount, m_CompareFn);
+        //sort(m_pVect, m_pVect+m_vcount, m_CompareFn);
         for(size_t i = 0; i < m_vcount ; ++i )
             os << m_pVect[i].getKey() << "\t: " << m_pVect[i].getValue() << endl;
         //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
