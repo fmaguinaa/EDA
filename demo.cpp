@@ -52,7 +52,7 @@ void DemoArray(){
 
     // Using an array with []
     for(auto i = 0 ; i < v2.size() ; i++)
-        cout << "v2[" << i << "] = " << v2[i].getKey() << endl;
+        cout << "v2[" << i << "] = " << v2[i] << endl;
     ofstream of("test.txt", ios::out);
     of << v2 << endl; 
     cout << "DemoArray finished !" << endl;
