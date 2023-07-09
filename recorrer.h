@@ -9,7 +9,7 @@ void print(T &x)
 
 template <typename T>
 void inc(T &x)
-{  x+=5 ; }
+{  x+= 5; }
 
 template <typename Iterator, typename F>
 void recorrer(Iterator ItBegin, Iterator ItEnd, F ope)
@@ -37,6 +37,7 @@ template <typename Container>
 void recorrer(Container &container)
 {
     using T = typename Container::KeyType;
+    // using T = typename Container::value_type;
     recorrer(container, print<T>);  cout << endl; // recorre imprimiendo
     recorrer(container, inc<T>);  // recorre incrementando
     recorrer(container, print<T>);  cout << endl; // recorre imprimiendo
