@@ -109,7 +109,8 @@ void DemoIterators(){
 
     recorrer(v1, ::print<TX>);
     cout << endl;
-    recorrer(v1, [](TX &n){ n *= 2;});
+    // Lambda function
+    recorrer(v1, [](TX &n){ n *= 2; });
     recorrer(v1, ::print<TX>); cout << endl;
     ClassX<TX> ope(5);
     recorrer(v1, ope);
