@@ -61,8 +61,8 @@ public:
         return *this;
     }
 
-    KeyType    getKey() const   { return m_key; }
-    KeyType&   getKeyRef()      { return m_key; }
+    KeyType    getData() const   { return m_key; }
+    KeyType&   getDataRef()      { return m_key; }
     ValueType  getValue() const { return m_value; }
     ValueType& getValueRef()    { return m_value; }
 
@@ -77,7 +77,7 @@ public:
 
 template <typename Node>
 bool xless (Node &obj1, Node &obj2) 
-{ return (obj1.getKey() < obj2.getKey()); }
+{ return (obj1.getData() < obj2.getData()); }
 
 template <typename _K, typename _V, 
             typename _CompareFn = std::less< NodeArray<_K, _V> & >>
@@ -96,14 +96,14 @@ using TraitFloatLong        = ArrayTrait<float, long  , std::greater<NodeArray<f
 // Created by: @ecuadros
 template <typename Traits>
 class CArray{
-private:
+public:
     using KeyType   = typename Traits::KeyType;
     using ValueType = typename Traits::ValueType ;
     using Node      = typename Traits::Node;
     using CompareFn = typename Traits::CompareFn;
     using myself    = CArray<Traits>;
     using iterator  = array_forward_iterator<myself>;
-
+private:
     Node     *m_pVect = nullptr;
     size_t    m_vcount = 0, m_vmax = 0;
     string    m_name = "Empty";
@@ -134,7 +134,7 @@ public:
         sort(m_pVect, m_pVect+m_vcount, CompareFn() );
         // sort(m_pVect, m_pVect+m_vcount, std::less<Node>());
         for(size_t i = 0; i < m_vcount ; ++i )
-            os << m_pVect[i].getKey() << "\t: " << m_pVect[i].getValue() << endl;
+            os << m_pVect[i].getData() << "\t: " << m_pVect[i].getValue() << endl;
         //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
     }
     void read(istream &is){
@@ -145,7 +145,7 @@ public:
     size_t size()
     {  return m_vcount;    }
     KeyType &operator[](size_t pos)
-    {   return m_pVect[pos].getKeyRef();    }
+    {   return m_pVect[pos].getDataRef();    }
 
     iterator begin() { iterator iter(this, m_pVect);    return iter;    }
     iterator end()   { iterator iter(this, nullptr);    return iter;    }
