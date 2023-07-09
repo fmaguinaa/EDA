@@ -74,13 +74,52 @@ void DemoArray(){
     vx.insert("Edson"  , "Caceres");
     vx.insert("Franz"  , "Maguiña");
     vx.print(cout);
+}
 
-    recorrer(vx);
+template <typename T, int N>
+void increment(T &x)
+{  x+= N; }
+
+template <typename T>
+void print(T &x)
+{  cout << x << "  "; }
+
+template <typename T>
+class ClassX
+{          int m_inc = 0;
+    public:  ClassX(int n) : m_inc(n){}
+    void operator()(T &n){  n += m_inc;     }
+};
+
+void DemoIterators(){
+    CArray< TraitArrayIntInt > v1("Jorge");
+    
+    v1.insert(30, 40);
+    v1.insert(18, 45);
+    v1.insert(20, 35);
+    v1.insert(7 , 64);
+    v1.insert(12, 25);
+    v1.insert(8 , 17);
+
+    cout << v1 << endl;
+    recorrer(v1.begin(), v1.end(), ::increment<TX, 7>);
+    cout << v1 << endl;
+    recorrer(v1, ::increment<TX, 4>);
+    cout << v1 << endl;
+
+    recorrer(v1, ::print<TX>);
+    cout << endl;
+    recorrer(v1, [](TX &n){ n *= 2;});
+    recorrer(v1, ::print<TX>); cout << endl;
+    ClassX<TX> ope(5);
+    recorrer(v1, ope);
+    recorrer(v1, ::print<TX>); cout << endl;
+    recorrer(v1, ClassX<TX>(8) );
+    recorrer(v1, ::print<TX>); cout << endl;
 }
 
 void DemoBinaryTree()
 {
-
     cout << "Hello from DemoBinaryTree()" <<endl;
 }
 

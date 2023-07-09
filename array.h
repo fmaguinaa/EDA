@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <algorithm> // sort algorithm
+#include "types.h"
 #include "iterator.h"
 using namespace std;
 
@@ -22,7 +23,7 @@ class array_forward_iterator
     array_forward_iterator(myself &&other) : Parent(other) {} // Move constructor C++11 en adelante
 
 public:
-    array_forward_iterator operator++() { Parent::m_pNode = Parent::m_pNode++;  
+    array_forward_iterator operator++() { Parent::m_pNode++;  
                                           return *this;
                                         }
 };
@@ -32,17 +33,17 @@ template <typename T, typename V>
 class NodeArray
 {
 public:
-  using KeyType   = T;
+  using value_type   = T;
   using Type      = T;
-  using ValueType = V;
+  using LinkedValueType = V;
 private:
   using Node      = NodeArray<T, V> ;
 public:
-    KeyType       m_key;
-    ValueType      m_value;
+    value_type       m_key;
+    LinkedValueType      m_value;
 
 public:
-    NodeArray(KeyType key, ValueType value) 
+    NodeArray(value_type key, LinkedValueType value) 
         : m_key(key), m_value(value) {}
 
     NodeArray(const NodeArray<T, V>& other) : 
@@ -61,10 +62,10 @@ public:
         return *this;
     }
 
-    KeyType    getData() const   { return m_key; }
-    KeyType&   getDataRef()      { return m_key; }
-    ValueType  getValue() const { return m_value; }
-    ValueType& getValueRef()    { return m_value; }
+    value_type    getData() const   { return m_key; }
+    value_type&   getDataRef()      { return m_key; }
+    LinkedValueType  getValue() const { return m_value; }
+    LinkedValueType& getValueRef()    { return m_value; }
 
     bool operator<(const NodeArray<T, V>& other) const { 
         return m_key < other.m_key;
@@ -83,22 +84,22 @@ template <typename _K, typename _V,
             typename _CompareFn = std::less< NodeArray<_K, _V> & >>
 struct ArrayTrait
 {
-    using  KeyType   = _K;
-    using  ValueType = _V;
+    using  value_type   = _K;
+    using  LinkedValueType = _V;
     using  Node      = NodeArray<_K, _V>;
     using  CompareFn = _CompareFn;
 };
 
 using TraitArrayFloatString = ArrayTrait<float, string>;
-using TraitArrayIntInt      = ArrayTrait<int  , int   , std::greater<NodeArray<int  , int > &>>;
+using TraitArrayIntInt      = ArrayTrait<TX  , int   , std::greater<NodeArray<TX  , int > &>>;
 using TraitFloatLong        = ArrayTrait<float, long  , std::greater<NodeArray<float, long> &>>;
 
 // Created by: @ecuadros
 template <typename Traits>
 class CArray{
 public:
-    using KeyType   = typename Traits::KeyType;
-    using ValueType = typename Traits::ValueType ;
+    using value_type      = typename Traits::value_type;
+    using LinkedValueType = typename Traits::LinkedValueType;
     using Node      = typename Traits::Node;
     using CompareFn = typename Traits::CompareFn;
     using myself    = CArray<Traits>;
@@ -114,7 +115,7 @@ public:
         cout << "Destroying " << m_name << "..." << endl;
         reset();
     }
-    void insert(KeyType key, ValueType value){
+    void insert(value_type key, LinkedValueType value){
         if(m_vcount == m_vmax) // Array is already full?
             resize();
         m_pVect[m_vcount++] = Node(key, value);
@@ -131,8 +132,7 @@ public:
     void print        (ostream &os){
         // os << "Printing: " << m_name << endl;
         os << m_vcount << " " << m_vmax << endl;
-        sort(m_pVect, m_pVect+m_vcount, CompareFn() );
-        // sort(m_pVect, m_pVect+m_vcount, std::less<Node>());
+        // sort(m_pVect, m_pVect+m_vcount, CompareFn() );
         for(size_t i = 0; i < m_vcount ; ++i )
             os << m_pVect[i].getData() << "\t: " << m_pVect[i].getValue() << endl;
         //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
@@ -144,11 +144,11 @@ public:
 
     size_t size()
     {  return m_vcount;    }
-    KeyType &operator[](size_t pos)
+    value_type &operator[](size_t pos)
     {   return m_pVect[pos].getDataRef();    }
 
     iterator begin() { iterator iter(this, m_pVect);    return iter;    }
-    iterator end()   { iterator iter(this, nullptr);    return iter;    }
+    iterator end()   { iterator iter(this, m_pVect+m_vcount);    return iter;    }
 };
 
 template <typename Traits>
