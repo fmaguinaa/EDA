@@ -2,6 +2,7 @@
 #define __DEMO_H__
 
 void DemoArray();
+void DemoIterators();
 void DemoBinaryTree();
 void DemoHash();
 

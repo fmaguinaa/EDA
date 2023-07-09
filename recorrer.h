@@ -4,11 +4,11 @@
 using namespace std;
 
 template <typename T>
-void print(T &x)
+void f2(T &x)
 {  cout << x << "  "; }
 
 template <typename T>
-void inc(T &x)
+void f1(T &x)
 {  x+= 5; }
 
 template <typename Iterator, typename F>
@@ -36,11 +36,11 @@ void recorrer(Container &container, F ope)
 template <typename Container>
 void recorrer(Container &container)
 {
-    using T = typename Container::KeyType;
+    using T = typename Container::value_type;
     // using T = typename Container::value_type;
-    recorrer(container, print<T>);  cout << endl; // recorre imprimiendo
-    recorrer(container, inc<T>);  // recorre incrementando
-    recorrer(container, print<T>);  cout << endl; // recorre imprimiendo
+    // recorrer(container, print<T>);  cout << endl; // recorre imprimiendo
+    // recorrer(container, inc<T>);  // recorre incrementando
+    // recorrer(container, print<T>);  cout << endl; // recorre imprimiendo
 
 //     // funciones lambda
 //     recorrer(container, [](T &n){ n-= 5;}); cout << endl; // -5 a todos
