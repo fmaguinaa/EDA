@@ -3,13 +3,37 @@
 
 #include <iostream>
 #include <algorithm> // sort algorithm
+#include "iterator.h"
 using namespace std;
+
+template <typename Container>
+class array_forward_iterator 
+     : public general_iterator<Container,  class array_forward_iterator<Container> > // 
+{public: 
+    // TODO: subir al padre  
+    typedef class general_iterator<Container, array_forward_iterator<Container> > Parent; 
+    typedef typename Container::Node           Node; // 
+    typedef array_forward_iterator<Container>  myself;
+
+  public:
+    array_forward_iterator(Container *pContainer, Node *pNode) 
+            : Parent (pContainer,pNode) {}
+    array_forward_iterator(myself &other)  : Parent (other) {}
+    array_forward_iterator(myself &&other) : Parent(other) {} // Move constructor C++11 en adelante
+
+public:
+    array_forward_iterator operator++() { Parent::m_pNode = Parent::m_pNode++;  
+                                          return *this;
+                                        }
+};
+
 
 template <typename T, typename V>
 class NodeArray
 {
 public:
   using KeyType   = T;
+  using Type      = T;
   using ValueType = V;
 private:
   using Node      = NodeArray<T, V> ;
@@ -77,6 +101,8 @@ private:
     using ValueType = typename Traits::ValueType ;
     using Node      = typename Traits::Node;
     using CompareFn = typename Traits::CompareFn;
+    using myself    = CArray<Traits>;
+    using iterator  = array_forward_iterator<myself>;
 
     Node     *m_pVect = nullptr;
     size_t    m_vcount = 0, m_vmax = 0;
@@ -120,6 +146,9 @@ public:
     {  return m_vcount;    }
     KeyType &operator[](size_t pos)
     {   return m_pVect[pos].getKeyRef();    }
+
+    iterator begin() { iterator iter(this, m_pVect);    return iter;    }
+    iterator end()   { iterator iter(this, nullptr);    return iter;    }
 };
 
 template <typename Traits>

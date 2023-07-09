@@ -3,6 +3,7 @@
 #include <cmath>
 #include "demo.h"
 #include "array.h"
+#include "recorrer.h"
 using namespace std;
 
 void DemoSmartPointers(){
@@ -73,6 +74,8 @@ void DemoArray(){
     vx.insert("Edson"  , "Caceres");
     vx.insert("Franz"  , "Maguiña");
     vx.print(cout);
+
+    recorrer(vx);
 }
 
 void DemoBinaryTree()
