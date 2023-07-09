@@ -99,6 +99,7 @@ template <typename Traits>
 class CArray{
 public:
     using value_type      = typename Traits::value_type;
+    using KeyType         = typename Traits::value_type;
     using LinkedValueType = typename Traits::LinkedValueType;
     using Node      = typename Traits::Node;
     using CompareFn = typename Traits::CompareFn;
