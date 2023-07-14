@@ -1,6 +1,7 @@
 #include <iostream> // cout
 #include <fstream>  // ofstream, ifstream
 #include <cmath>
+#include <memory>
 #include "demo.h"
 #include "array.h"
 #include "recorrer.h"
@@ -117,6 +118,23 @@ void DemoIterators(){
     recorrer(v1, ::print<TX>); cout << endl;
     recorrer(v1, ClassX<TX>(8) );
     recorrer(v1, ::print<TX>); cout << endl;
+}
+
+void DemoReverseIterators(){
+    CArray< TraitArrayIntInt > v1("Reverse");
+
+    v1.insert(30, 40);
+    v1.insert(18, 45);
+    v1.insert(20, 35);
+    v1.insert(7 , 64);
+    v1.insert(12, 25);
+    v1.insert(8 , 17);
+
+    cout << v1 << endl;
+    recorrer(v1.rbegin(), v1.rend(), ::print<TX>);
+    cout << v1 << endl;
+    recorrer(v1, ::increment<TX, 4>);
+    cout << v1 << endl;
 }
 
 void DemoBinaryTree()
