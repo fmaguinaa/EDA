@@ -132,9 +132,7 @@ void DemoReverseIterators(){
 
     cout << v1 << endl;
     recorrer(v1.rbegin(), v1.rend(), ::print<TX>);
-    cout << v1 << endl;
-    recorrer(v1, ::increment<TX, 4>);
-    cout << v1 << endl;
+    cout << endl;
 }
 
 void DemoBinaryTree()
