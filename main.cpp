@@ -12,8 +12,9 @@ using namespace std;
 int main()
 {
     // DemoParameters();
-    DemoArray();
-    DemoIterators();
+    //DemoArray();
+    //DemoIterators();
+    DemoReverseIterators();
     // DemoBinaryTree();
     // DemoHash();
 
