@@ -1,6 +1,7 @@
 #include <iostream> // cout
 #include <fstream>  // ofstream, ifstream
 #include <cmath>
+#include <memory>
 #include "demo.h"
 #include "array.h"
 #include "matrix.h"
@@ -97,7 +98,8 @@ void DemoDynamicMatrixes(){
     cout << mat2;
 
     // TODO #1: overload operator*(CMatrix<Traits> &other)
-    // CMatrix<MatrixTraitFloat> mat3 = mat1 * mat2;
+    CMatrix<MatrixTraitFloat> mat3 = mat1 * mat2;
+    cout << mat3;
 
     // TODO #2: Create Iterator for CMatrix
     // recorrer(mat3, ::print<TX>);
@@ -115,9 +117,9 @@ void DemoDynamicMatrixes(){
 
     // // TODO #3: prepare Matrix to be used as a matrix from outside
     // // overload operator[](size_t row)
-    // mat1[2][3] = 8.2;
-    // mat1(2, 2) = 7.5; // Operator () is returning a value_type &
-    // cout << mat1;
+    mat1[2][3] = 8.2;
+    mat1(2, 2) = 7.5; // Operator () is returning a value_type &
+    cout << mat1;
 }
 
 void DemoPreandPostIncrement(){
