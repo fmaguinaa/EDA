@@ -3,6 +3,7 @@
 
 void DemoArray();
 void DemoIterators();
+void DemoReverseIterators();
 void DemoBinaryTree();
 void DemoHash();
 
