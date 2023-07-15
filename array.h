@@ -139,8 +139,17 @@ public:
         //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
     }
     void read(istream &is){
+        //freeing up space if it was already assigned
         destroy();
-        // read here
+        // read here By Edson Caceres
+        size_t vcount;
+        is>>vcount>>m_vmax;
+        Node *pTemp = new Node[m_vmax];
+        //inserting values from .txt file
+        value_type value;
+        while(is >> value && size() != vcount){ //keeping in mind the m_vmax
+            this->insert(value);
+        }
     }
 
     size_t size()
