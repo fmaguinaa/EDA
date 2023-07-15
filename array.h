@@ -84,7 +84,7 @@ template <typename _K, typename _V,
             typename _CompareFn = std::less< NodeArray<_K, _V> & >>
 struct ArrayTrait
 {
-    using  value_type   = _K;
+    using  value_type      = _K;
     using  LinkedValueType = _V;
     using  Node      = NodeArray<_K, _V>;
     using  CompareFn = _CompareFn;
@@ -101,10 +101,10 @@ public:
     using value_type      = typename Traits::value_type;
     using KeyType         = typename Traits::value_type;
     using LinkedValueType = typename Traits::LinkedValueType;
-    using Node      = typename Traits::Node;
-    using CompareFn = typename Traits::CompareFn;
-    using myself    = CArray<Traits>;
-    using iterator  = array_forward_iterator<myself>;
+    using Node            = typename Traits::Node;
+    using CompareFn       = typename Traits::CompareFn;
+    using myself          = CArray<Traits>;
+    using iterator        = array_forward_iterator<myself>;
 private:
     Node     *m_pVect = nullptr;
     size_t    m_vcount = 0, m_vmax = 0;
