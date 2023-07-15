@@ -105,7 +105,7 @@ template <typename _K, typename _V,
             typename _CompareFn = std::less< NodeArray<_K, _V> & >>
 struct ArrayTrait
 {
-    using  value_type   = _K;
+    using  value_type      = _K;
     using  LinkedValueType = _V;
     using  Node      = NodeArray<_K, _V>;
     using  CompareFn = _CompareFn;
@@ -136,7 +136,7 @@ public:
     CArray(string name) : m_name(name) {}
     ~CArray(){
         cout << "Destroying " << m_name << "..." << endl;
-        reset();
+        destroy();
     }
     void insert(value_type key, LinkedValueType value){
         if(m_vcount == m_vmax) // Array is already full?
@@ -145,7 +145,7 @@ public:
         // cout << "Key=" << key << " Value=" << value << "\tinserted, m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
     }
     void resize       ();
-    void reset(){
+    void destroy(){
         delete [] m_pVect;
         m_pVect = nullptr;
         m_vcount = 0;
@@ -161,8 +161,17 @@ public:
         //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
     }
     void read(istream &is){
-        reset();
-        // read here
+        //freeing up space if it was already assigned
+        destroy();
+        // read here By Edson Caceres
+        size_t vcount;
+        is>>vcount>>m_vmax;
+        Node *pTemp = new Node[m_vmax];
+        //inserting values from .txt file
+        value_type value;
+        while(is >> value && size() != vcount){ //keeping in mind the m_vmax
+            this->insert(value);
+        }
     }
 
     size_t size()
