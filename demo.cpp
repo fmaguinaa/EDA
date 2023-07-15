@@ -3,8 +3,25 @@
 #include <cmath>
 #include "demo.h"
 #include "array.h"
+#include "matrix.h"
 #include "recorrer.h"
 using namespace std;
+
+template <typename T, int N>
+void increment(T &x)
+{  x+= N; }
+
+template <typename T>
+void print(T &x)
+{  cout << x << "  "; }
+
+// Object function
+template <typename T>
+class ClassX
+{          int m_inc = 0;
+    public:  ClassX(int n) : m_inc(n){}
+    void operator()(T &n){  n += m_inc;     }
+};
 
 void Fx1(int n ) {    n++;    }
 void Fx2(int &n) {    n++;    }
@@ -69,45 +86,38 @@ void DemoSmartPointers(){
     cout << *pV3 ;
 }
 
-TX **CreateMatrix(size_t rows, size_t cols){
-    TX **res = new TX *[rows];
-    for(auto i = 0 ; i < rows ; i++)
-        res[i] = new TX[cols];
-        // *(res+i) = new TX[cols];
-        // *(i+res) = new TX[cols];
-        // i[res] = new TX[cols];
-    return res;
-}
-
-void FillMatrix(TX **pM, size_t rows, size_t cols, TX val){
-    for(auto y = 0 ; y < rows ; y++)
-       for(auto x = 0 ; x < cols ; x++)
-           pM[y][x] = val;
-}
-
-void PrintMatrix(TX **pM, size_t rows, size_t cols){
-    for(auto y = 0 ; y < rows ; y++){
-        for(auto x = 0 ; x < cols ; x++)
-           cout << pM[y][x] << " ";
-        cout << endl;
-    }
-}
-void DestroyMatrix(TX **&pM, size_t rows, size_t cols){
-    for(auto y = 0 ; y < rows ; y++)
-        delete [] pM[y];
-    delete [] pM;
-    pM = nullptr;
-}
-
 void DemoDynamicMatrixes(){
 
-    TX **pM = nullptr;
-    size_t rows = 3, cols = 4;
-    pM = CreateMatrix(rows, cols);
-    FillMatrix(pM, rows, cols, 5);
-    PrintMatrix(pM, rows, cols);
-    DestroyMatrix(pM, rows, cols);
-    cout << pM << endl;
+    CMatrix<MatrixTraitFloat> mat1(3, 4);
+    mat1.fill(1);
+    cout << mat1;
+
+    CMatrix<MatrixTraitFloat> mat2(4, 5);
+    mat2.fill(2.5);
+    cout << mat2;
+
+    // TODO #1: overload operator*(CMatrix<Traits> &other)
+    // CMatrix<MatrixTraitFloat> mat3 = mat1 * mat2;
+
+    // TODO #2: Create Iterator for CMatrix
+    // recorrer(mat3, ::print<TX>);
+    // cout << endl;
+
+    // TX x = 1;
+    // // Lambda function
+    // recorrer(mat1, [x](TX &n){ n += x; x++; });
+    // recorrer(mat1, ::print<TX>); cout << endl;
+    // ClassX<TX> ope(5);
+    // recorrer(mat1, ope);
+    // recorrer(mat1, ::print<TX>); cout << endl;
+    // recorrer(mat1, ClassX<TX>(8) );
+    // recorrer(mat1, ::print<TX>); cout << endl;
+
+    // // TODO #3: prepare Matrix to be used as a matrix from outside
+    // // overload operator[](size_t row)
+    // mat1[2][3] = 8.2;
+    // mat1(2, 2) = 7.5; // Operator () is returning a value_type &
+    // cout << mat1;
 }
 
 void DemoPreandPostIncrement(){
@@ -172,22 +182,6 @@ void DemoArray(){
     vx.insert("Franz"  , "Maguiña");
     vx.print(cout);
 }
-
-template <typename T, int N>
-void increment(T &x)
-{  x+= N; }
-
-template <typename T>
-void print(T &x)
-{  cout << x << "  "; }
-
-// Object function
-template <typename T>
-class ClassX
-{          int m_inc = 0;
-    public:  ClassX(int n) : m_inc(n){}
-    void operator()(T &n){  n += m_inc;     }
-};
 
 void DemoIterators(){
     CArray< TraitArrayIntInt > v1("Jorge");

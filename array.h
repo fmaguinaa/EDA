@@ -114,7 +114,7 @@ public:
     CArray(string name) : m_name(name) {}
     ~CArray(){
         cout << "Destroying " << m_name << "..." << endl;
-        reset();
+        destroy();
     }
     void insert(value_type key, LinkedValueType value){
         if(m_vcount == m_vmax) // Array is already full?
@@ -123,7 +123,7 @@ public:
         // cout << "Key=" << key << " Value=" << value << "\tinserted, m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
     }
     void resize       ();
-    void reset(){
+    void destroy(){
         delete [] m_pVect;
         m_pVect = nullptr;
         m_vcount = 0;
@@ -139,7 +139,7 @@ public:
         //os << "m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
     }
     void read(istream &is){
-        reset();
+        destroy();
         // read here
     }
 
