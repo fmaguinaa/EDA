@@ -72,6 +72,11 @@ public:
         m_ppMatrix = nullptr;
         m_rows = m_cols = 0;
     }
+    // CMatrix<Traits> operator*(const CMatrix<Traits> &other){
+    //     CMatrix<Traits> res(m_rows, other.m_cols);
+        
+    //     return res;
+    // }
 };
 
 template <typename Traits>

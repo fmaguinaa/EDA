@@ -217,7 +217,7 @@ void DemoIterators(){
 }
 
 void DemoReverseIterators(){
-    cout << "DEMO REVERSE ITERATORS FOR ARRAY AS A CONTEINER : " << endl;
+    cout << "DemoReverseIterators: " << endl;
     CArray< TraitArrayIntInt > v1("Edson Cáceres");
     v1.insert(30, 40);
     v1.insert(18, 45);
