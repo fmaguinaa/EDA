@@ -100,6 +100,13 @@ public:
     //     return res;
     // }
     
+    // value_type &operator()(size_t rows, size_t cols){
+
+    // }
+    // operator[](size_t row){
+
+    // }
+
     // iterator begin() { iterator iter(this, m_ppMatrix);    return iter;    }
     // iterator end()   { iterator iter(this, m_pVect+m_vcount);    return iter;    }
 

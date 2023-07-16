@@ -5,7 +5,7 @@
 #include "demo.h"
 #include "array.h"
 #include "matrix.h"
-#include "recorrer.h"
+#include "foreach.h"
 using namespace std;
 
 template <typename T, int N>
@@ -101,18 +101,18 @@ void DemoDynamicMatrixes(){
     // CMatrix<MatrixTraitFloat> mat3 = mat1 * mat2;
 
     // TODO #2: Create Iterator for CMatrix
-    // recorrer(mat3, ::print<TX>);
+    // foreach(mat3, ::print<TX>);
     // cout << endl;
 
     // TX x = 1;
     // // Lambda function
-    // recorrer(mat1, [x](TX &n){ n += x; x++; });
-    // recorrer(mat1, ::print<TX>); cout << endl;
+    // foreach(mat1, [x](TX &n){ n += x; x++; });
+    // foreach(mat1, ::print<TX>); cout << endl;
     // ClassX<TX> ope(5);
-    // recorrer(mat1, ope);
-    // recorrer(mat1, ::print<TX>); cout << endl;
-    // recorrer(mat1, ClassX<TX>(8) );
-    // recorrer(mat1, ::print<TX>); cout << endl;
+    // foreach(mat1, ope);
+    // foreach(mat1, ::print<TX>); cout << endl;
+    // foreach(mat1, ClassX<TX>(8) );
+    // foreach(mat1, ::print<TX>); cout << endl;
 
     // // TODO #3: prepare Matrix to be used as a matrix from outside
     // // overload operator[](size_t row)
@@ -198,22 +198,22 @@ void DemoIterators(){
     // array_forward_iterator<CArray< TraitArrayIntInt >> iter = v1.begin();
     //CArray< TraitArrayIntInt >::iterator iter = v1.begin();
     auto iter = v1.begin();
-    recorrer(iter, v1.end(), ::increment<TX, 7>);
+    foreach(iter, v1.end(), ::increment<TX, 7>);
     cout << v1 << endl;
-    recorrer(v1, ::increment<TX, 4>);
+    foreach(v1, ::increment<TX, 4>);
     cout << v1 << endl;
 
-    recorrer(v1, ::print<TX>);
+    foreach(v1, ::print<TX>);
     cout << endl;
     // Lambda function
     int x = 3;
-    recorrer(v1, [x](TX &n){ n *= 2*x; });
-    recorrer(v1, ::print<TX>); cout << endl;
+    foreach(v1, [x](TX &n){ n *= 2*x; });
+    foreach(v1, ::print<TX>); cout << endl;
     ClassX<TX> ope(5);
-    recorrer(v1, ope);
-    recorrer(v1, ::print<TX>); cout << endl;
-    recorrer(v1, ClassX<TX>(8) );
-    recorrer(v1, ::print<TX>); cout << endl;
+    foreach(v1, ope);
+    foreach(v1, ::print<TX>); cout << endl;
+    foreach(v1, ClassX<TX>(8) );
+    foreach(v1, ::print<TX>); cout << endl;
 }
 
 void DemoReverseIterators(){
@@ -229,7 +229,7 @@ void DemoReverseIterators(){
     cout << "Printing asc : " << endl;
     cout << v1 << endl;
     cout << "Printing desc : " << endl;
-    recorrer(v1.rbegin(), v1.rend(), ::print<TX>);
+    foreach(v1.rbegin(), v1.rend(), ::print<TX>);
 }
 
 void DemoBinaryTree()
