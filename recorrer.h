@@ -16,7 +16,7 @@ void recorrer(Iterator ItBegin, Iterator ItEnd, F ope)
 {
   auto iter = ItBegin;
   for(; iter != ItEnd ; ++iter)
-      ope(*iter);
+    ope(*iter);
 }
 
 // #1
