@@ -89,10 +89,13 @@ void DemoSmartPointers(){
 
 void DemoDynamicMatrixes(){
 
+    cout << "----------------mat1--------------------" << endl;
     CMatrix<MatrixTraitFloat> mat1(3, 4);
     mat1.fill(1);
+    //cout << "k : " << mat1.m_rows<<endl;
     cout << mat1;
 
+    cout << "----------------mat1--------------------" << endl;
     CMatrix<MatrixTraitFloat> mat2(4, 5);
     mat2.fill(2.5);
     cout << mat2;
@@ -114,11 +117,13 @@ void DemoDynamicMatrixes(){
     // foreach(mat1, ClassX<TX>(8) );
     // foreach(mat1, ::print<TX>); cout << endl;
 
-    // // TODO #3: prepare Matrix to be used as a matrix from outside
+     // // TODO #3: prepare Matrix to be used as a matrix from outside
     // // overload operator[](size_t row)
-    // mat1[2][3] = 8.2;
-    // mat1(2, 2) = 7.5; // Operator () is returning a value_type &
-    // cout << mat1;
+    cout << "----------------Operator [] and ()-------------------" << endl;
+    mat1[2][3] = 8.2;
+    mat1(2, 2) = 7.5; // Operator () is returning a value_type &
+    cout << mat1;
+    cout << endl;
 }
 
 void DemoPreandPostIncrement(){
