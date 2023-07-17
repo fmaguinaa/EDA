@@ -13,10 +13,10 @@ class matrix_iterator
     typedef matrix_iterator<Container>  myself;
 
   public:
-    array_backward_iterator(Container *pContainer, Node *pNode) 
+    matrix_iterator(Container *pContainer, Node *pNode) 
             : Parent (pContainer,pNode) {}
-    array_backward_iterator(myself &other)  : Parent (other) {}
-    array_backward_iterator(myself &&other) : Parent(other) {} // Move constructor C++11 en adelante
+    matrix_iterator(myself &other)  : Parent (other) {}
+    matrix_iterator(myself &&other) : Parent(other) {} // Move constructor C++11 en adelante
 
 public:
     matrix_iterator operator++() { // Parent::m_pNode--;
@@ -100,12 +100,12 @@ public:
     //     return res;
     // }
     
-    // value_type &operator()(size_t rows, size_t cols){
-
-    // }
-    // operator[](size_t row){
-
-    // }
+    value_type &operator()(size_t row, size_t col){
+        return m_ppMatrix[row][col];
+    }
+    value_type* &operator[](size_t row){
+        return m_ppMatrix[row];
+    }
 
     // iterator begin() { iterator iter(this, m_ppMatrix);    return iter;    }
     // iterator end()   { iterator iter(this, m_pVect+m_vcount);    return iter;    }
