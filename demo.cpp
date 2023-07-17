@@ -93,7 +93,8 @@ class ClassX
 };
 
 void DemoIterators(){
-    CArray< TraitArrayIntInt > v1("Jorge");
+    cout << "DemoIterators" << endl;
+    CArray< TraitArrayIntInt > v1("Iterators");
     
     v1.insert(30, 40);
     v1.insert(18, 45);
@@ -121,8 +122,8 @@ void DemoIterators(){
 }
 
 void DemoReverseIterators(){
-    CArray< TraitArrayIntInt > v1("Reverse");
-
+    cout << "DemoReverseIterators" << endl;
+    CArray< TraitArrayIntInt > v1("Reverse Iterators");
     v1.insert(30, 40);
     v1.insert(18, 45);
     v1.insert(20, 35);
@@ -131,7 +132,7 @@ void DemoReverseIterators(){
     v1.insert(8 , 17);
 
     cout << v1 << endl;
-    recorrer(v1.rbegin(), v1.rend(), ::print<TX>);
+    recorrer_inverso(v1.rbegin(), v1.rend(), ::print<TX>);
     cout << endl;
 }
 

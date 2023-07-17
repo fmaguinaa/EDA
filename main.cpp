@@ -13,7 +13,7 @@ int main()
 {
     // DemoParameters();
     // DemoArray();
-    // DemoIterators();
+    DemoIterators();
     DemoReverseIterators();
     // DemoBinaryTree();
     // DemoHash();
