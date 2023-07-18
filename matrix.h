@@ -4,31 +4,45 @@
 #include "iterator.h"
 
 template <typename Container>
-class matrix_iterator 
-     : public general_iterator<Container,  class matrix_iterator<Container> > // 
+class matrix_iterator
 {public: 
-    // TODO: subir al padre  
-    typedef class general_iterator<Container, matrix_iterator<Container> > Parent; 
-    typedef typename Container::Node           Node; // 
+    typedef typename Container::Node    Node;
+    typedef typename Node::Type         Type;
     typedef matrix_iterator<Container>  myself;
+private:
+    Container *m_pContainer;
+    Node      *m_pNode;
     size_t i = 0,j = 0;
-  public:
-    matrix_iterator(Container *pContainer, Node *pNode) 
-            : Parent (pContainer,pNode) {}
-    matrix_iterator(myself &other)  : Parent (other) {}
-    matrix_iterator(myself &&other) : Parent(other) {} // Move constructor C++11 en adelante
+public:
+    matrix_iterator(Container *pContainer, Node *pNode) : m_pContainer(pContainer), m_pNode(pNode) {}
+    matrix_iterator(myself &other)
+            : m_pContainer(other.m_pContainer), m_pNode(other.m_pNode){}
+    matrix_iterator(myself &&other) 
+    {
+        m_pContainer = move(other.m_pContainer);
+        m_pNode      = move(other.m_pNode);
+    }
 
 public:
     matrix_iterator operator++() {
-        if(j == Parent::m_pContainer->cols() - 1){
+        if(j == m_pContainer->cols() - 1){
             j = 0;
             i++;
-            Parent::m_pNode = Parent::m_pContainer->row(i);
+            m_pNode = m_pContainer->row(i);
         }else{
             j++;
-            Parent::m_pNode++;
+            m_pNode++;
         }    
         return *this;
+    }
+    bool operator==(matrix_iterator iter)   { return m_pNode == iter.m_pNode; }
+    bool operator!=(matrix_iterator iter)   { return !(*this == iter);        }
+    Type &operator*()                    { return m_pNode->getDataRef();   }
+
+    matrix_iterator operator=(matrix_iterator &iter)
+    {   m_pContainer = move(iter.m_pContainer);
+        m_pNode      = move(iter.m_pNode);
+        return *this; // Pending static_cast?
     }
 };
 
@@ -56,10 +70,6 @@ public:
 
     value_type getData() const {return m_key;}
     value_type& getDataRef() {return m_key;}
-
-    constexpr operator value_type() const noexcept { //d since C++14
-        return m_key;
-    }
 };
 
 
@@ -122,7 +132,7 @@ public:
         os << m_rows << " " << m_cols << endl;
         for(auto y = 0 ; y < m_rows ; y++){
             for(auto x = 0 ; x < m_cols ; x++)
-                os << m_ppMatrix[y][x] << " ";
+                os << m_ppMatrix[y][x].getDataRef() << " ";
             os << endl;
         }
     }
