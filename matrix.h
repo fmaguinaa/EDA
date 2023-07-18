@@ -25,14 +25,14 @@ public:
 
 public:
     matrix_iterator operator++() {
-        if(j == m_pContainer->cols() - 1){
-            j = 0;
-            i++;
-            m_pNode = m_pContainer->row(i);
-        }else{
+        if(j != m_pContainer->cols() - 1){
             j++;
-            m_pNode++;
-        }    
+        } else {
+            i++;
+            j=0;
+        }
+        Node** matrix = m_pContainer->matrix();
+        m_pNode = *(matrix+i)+j;
         return *this;
     }
     bool operator==(matrix_iterator iter)   { return m_pNode == iter.m_pNode; }
@@ -40,7 +40,8 @@ public:
     Type &operator*()                    { return m_pNode->getDataRef();   }
 
     matrix_iterator operator=(matrix_iterator &iter)
-    {   m_pContainer = move(iter.m_pContainer);
+    {
+        m_pContainer = move(iter.m_pContainer);
         m_pNode      = move(iter.m_pNode);
         return *this; // Pending static_cast?
     }
@@ -146,13 +147,10 @@ public:
 
     size_t rows() {return m_rows;}
     size_t cols() {return m_cols;}
+    Node** matrix() {return m_ppMatrix;}
 
-    iterator begin() { iterator iter(this, m_ppMatrix[0]);    return iter;    }
-    iterator end()   { iterator iter(this, m_ppMatrix[m_rows]);    return iter;    }
-
-    Node* row(size_t row){
-        return m_ppMatrix[row];
-    }
+    iterator begin() { iterator iter(this, *m_ppMatrix);    return iter;    }
+    iterator end()   { iterator iter(this, *(m_ppMatrix+(m_rows-1))+(m_cols-1));    return iter;    }
 
     // CMatrix<Traits> operator*(const CMatrix<Traits> &other){
     //     CMatrix<Traits> res(m_rows, other.m_cols);
