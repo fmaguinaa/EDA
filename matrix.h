@@ -99,12 +99,24 @@ public:
         
     //     return res;
     // }
+
+    class CRow
+    {
+        friend class CMatrix;
+    private:
+        CMatrix &m_parent;
+        size_t m_row;
+        CRow(CMatrix &parent, size_t row) : m_parent(parent), m_row(row) {}
+
+    public:
+        value_type &operator[](size_t col) { return m_parent.m_ppMatrix[m_row][col]; }
+    };
     
     value_type &operator()(size_t row, size_t col){
         return m_ppMatrix[row][col];
     }
-    value_type* &operator[](size_t row){
-        return m_ppMatrix[row];
+    CRow operator[](size_t row){
+        return CRow(*this, row);
     }
 
     // iterator begin() { iterator iter(this, m_ppMatrix);    return iter;    }
