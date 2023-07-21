@@ -16,11 +16,13 @@ private:
 public:
     matrix_iterator(Container *pContainer, Node *pNode) : m_pContainer(pContainer), m_pNode(pNode) {}
     matrix_iterator(myself &other)
-            : m_pContainer(other.m_pContainer), m_pNode(other.m_pNode){}
+            : m_pContainer(other.m_pContainer), m_pNode(other.m_pNode), i(other.i), j(other.j){}
     matrix_iterator(myself &&other) 
     {
         m_pContainer = move(other.m_pContainer);
         m_pNode      = move(other.m_pNode);
+        i = move(other.i);
+        j = move(other.j);
     }
 
 public:
@@ -43,6 +45,8 @@ public:
     {
         m_pContainer = move(iter.m_pContainer);
         m_pNode      = move(iter.m_pNode);
+        i = move(iter.i);
+        j = move(iter.j);
         return *this; // Pending static_cast?
     }
 };
