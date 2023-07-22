@@ -19,7 +19,38 @@ void foreach(Iterator ItBegin, Iterator ItEnd, F ope)
       ope(*iter);
 }
 
+// template <typename Iterator, typename Callable, typename... Args>
+// void foreach(Iterator ItBegin, Iterator ItEnd, Callable op, Args&&... args)
+// {
+//     for (auto iter = ItBegin; iter != ItEnd; ++iter)
+//     {
+//         if constexpr (is_void_v<invoke_result_t<Callable, typename Iterator::value_type, Args...>>)
+//         {
+//             cout << "Function is returning: void!" << endl;
+//             invoke(op, *iter, forward<Args>(args)...);
+//             //...  // do something before we return
+//         }
+//         else // return type is not void:
+//         {
+//             auto ret = invoke(op, *iter, forward<Args>(args)...);
+//             cout << "Function is returning: " << type_name<decltype(ret)>() << endl;
+//             //...  // do something (with ret) before we return
+//         }
+//     }
+// }
+
 // #1
+template <typename Container, typename F>
+void foreach(Container &container, F ope)
+{  
+    foreach(container.begin(), container.end(), ope);
+}
+
+// template <typename Iterator, typename Callable, typename... Args>
+// void foreach(Iterator ItBegin, Iterator ItEnd, Callable op, Args&&... args)
+// {   foreach(container.begin(), container.end(), ope);
+// }
+
 template <typename Container, typename F>
 void foreach(Container &container, F ope)
 {  
