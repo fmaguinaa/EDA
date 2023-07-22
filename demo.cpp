@@ -105,12 +105,22 @@ void DemoDynamicMatrixes(){
     CMatrix<MatrixTraitFloat> mat3 = mat1 * mat2;
     cout << mat3;
 
+    cout <<endl;
+    cout << "----------------Iterator matrix--------------------" << endl;
     // TODO #2: Create Iterator for CMatrix
+<<<<<<< HEAD
     // foreach(mat3, ::print<TX>);
     // cout << endl;
+=======
+    cout <<endl<< "----mat1----" << endl;
+    recorrer(mat1, ::print<TX>);
+    cout << endl;
+>>>>>>> 17-MatrixIterator
 
-    // TX x = 1;
+    cout <<endl<< "----mat1 sumando un contador----" << endl;
+    TX x = 1;
     // // Lambda function
+<<<<<<< HEAD
     // foreach(mat1, [x](TX &n){ n += x; x++; });
     // foreach(mat1, ::print<TX>); cout << endl;
     // ClassX<TX> ope(5);
@@ -118,6 +128,18 @@ void DemoDynamicMatrixes(){
     // foreach(mat1, ::print<TX>); cout << endl;
     // foreach(mat1, ClassX<TX>(8) );
     // foreach(mat1, ::print<TX>); cout << endl;
+=======
+    //recorrer(mat1, [x](TX &n){ n += x; x++; });
+    recorrer(mat1, [&x](TX &n){ n += x; x++; });
+    recorrer(mat1, ::print<TX>); cout << endl;
+    cout <<endl<< "----mat1 sumando 5 a cada miembro----" << endl;
+    ClassX<TX> ope(5);
+    recorrer(mat1, ope);
+    recorrer(mat1, ::print<TX>); cout << endl;
+    cout <<endl<< "----mat1 sumando 8 a cada miembro----" << endl;
+    recorrer(mat1, ClassX<TX>(8) );
+    recorrer(mat1, ::print<TX>); cout << endl << endl;
+>>>>>>> 17-MatrixIterator
 
      // // TODO #3: prepare Matrix to be used as a matrix from outside
     // // overload operator[](size_t row)

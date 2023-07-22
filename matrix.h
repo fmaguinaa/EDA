@@ -1,21 +1,58 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 #include <iostream>
+#include <cassert>
+#include "iterator.h"
+
+template <typename Container>
+class matrix_iterator 
+     : public general_iterator<Container,  class matrix_iterator<Container> > // 
+{public: 
+    // TODO: subir al padre  
+    typedef class general_iterator<Container, matrix_iterator<Container> > Parent; 
+    typedef typename Container::Node           Node; // 
+    typedef matrix_iterator<Container>  myself;
+
+    public:
+
+        size_t i = 0;
+        size_t j = 0;
+
+  public:
+    matrix_iterator(Container *pContainer, Node *pNode) 
+            : Parent (pContainer,pNode) {}
+    matrix_iterator(myself &other)  : Parent (other) {}
+    matrix_iterator(myself &&other) : Parent(other) {} // Move constructor C++11 en adelante
+
+public:
+    matrix_iterator operator++(){
+        if(j == Parent::m_pContainer->cols() - 1){ //t
+            j = 0;
+            i++;
+            Parent::m_pNode = Parent::m_pContainer->firstPtrRow(i);
+        }else{
+            j++;
+            Parent::m_pNode++;
+        }        
+        return *this;
+    }
+};
 
 template <typename T>
 class NodeMatrix
 {
 public:
   using value_type   = T;
+  using Type      = T;
 private:
   using myself      = NodeMatrix<T> ;
 public:
     value_type       m_key;
 
 public:
-
+    
     NodeMatrix() {}
-
+    
     NodeMatrix(value_type key) 
         : m_key(key) {}
 
@@ -53,11 +90,9 @@ class CMatrix
     using Node            = typename Traits::Node;
     using Node            = typename Traits::Node;
     using myself          = CMatrix<Traits>;
-    //using iterator        = matrix_iterator<myself>;
-    //using iterator        = matrix_iterator<myself>;
+    using iterator        = matrix_iterator<myself>;
 
-    private:
-        Node **m_ppMatrix   = nullptr;
+private:
         Node **m_ppMatrix   = nullptr;
         size_t m_rows = 0, m_cols = 0;
 public:
@@ -74,14 +109,20 @@ public:
         m_ppMatrix = std::move(other.m_ppMatrix);
     }
 
+    size_t rows(){
+        return m_rows;
+    }
+
+    size_t cols(){
+        return m_cols;
+    }
+
     void create(size_t rows, size_t cols){
         destroy();
         m_rows = rows;
         m_cols = cols;
         m_ppMatrix = new Node *[m_rows]; //like in array.h
-        m_ppMatrix = new Node *[m_rows]; //like in array.h
         for(auto i = 0 ; i < m_rows ; i++)
-            m_ppMatrix[i] = new Node[m_cols];
             m_ppMatrix[i] = new Node[m_cols];
             // *(res+i) = new TX[m_cols];
             // *(i+res) = new TX[m_cols];
@@ -147,7 +188,12 @@ public:
 
     // iterator begin() { iterator iter(this, m_ppMatrix);    return iter;    }
     // iterator end()   { iterator iter(this, m_pVect+m_vcount);    return iter;    }
+    iterator begin() { iterator iter(this, m_ppMatrix[0]);    return iter;    }
+    iterator end()   { iterator iter(this, m_ppMatrix[m_rows]);    return iter;    }
 
+    Node* firstPtrRow(size_t row){
+        return m_ppMatrix[row];
+    }
 };
 
 template <typename Traits>
