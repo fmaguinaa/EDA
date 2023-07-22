@@ -5,6 +5,8 @@
 #include <algorithm> // sort algorithm
 #include "types.h"
 #include "iterator.h"
+#include "keynode.h"
+#include "xtrait.h"
 using namespace std;
 
 template <typename Container>
@@ -49,71 +51,9 @@ public:
                                         }
 };
 
-
-template <typename T, typename V>
-class NodeArray
-{
-public:
-  using value_type   = T;
-  using Type      = T;
-  using LinkedValueType = V;
-private:
-  using Node      = NodeArray<T, V> ;
-public:
-    value_type       m_key;
-    LinkedValueType      m_value;
-
-public:
-    NodeArray(value_type key, LinkedValueType value) 
-        : m_key(key), m_value(value) {}
-
-    NodeArray(const NodeArray<T, V>& other) : 
-        NodeArray(other.m_key, other.m_value) {}
-
-    NodeArray(NodeArray<T, V>&& other) // Move constructor
-        : m_key  (std::move(other.m_key)), 
-          m_value(std::move(other.m_value)) {}
-    NodeArray() {}
-
-    NodeArray& operator=(const NodeArray& other) {
-        if (this != &other) {
-            m_key = other.m_key;
-            m_value = other.m_value;
-        }
-        return *this;
-    }
-
-    value_type    getData() const   { return m_key; }
-    value_type&   getDataRef()      { return m_key; }
-    LinkedValueType  getValue() const { return m_value; }
-    LinkedValueType& getValueRef()    { return m_value; }
-
-    bool operator<(const NodeArray<T, V>& other) const { 
-        return m_key < other.m_key;
-    }
-    // Error was here. Next line was missing
-    bool operator>(const NodeArray<T, V>& other) const { 
-        return m_key > other.m_key;
-    }
-};
-
-template <typename Node>
-bool xless (Node &obj1, Node &obj2) 
-{ return (obj1.getData() < obj2.getData()); }
-
-template <typename _K, typename _V, 
-            typename _CompareFn = std::less< NodeArray<_K, _V> & >>
-struct ArrayTrait
-{
-    using  value_type      = _K;
-    using  LinkedValueType = _V;
-    using  Node      = NodeArray<_K, _V>;
-    using  CompareFn = _CompareFn;
-};
-
-using TraitArrayFloatString = ArrayTrait<float, string>;
-using TraitArrayIntInt      = ArrayTrait<TX  , int   , std::greater<NodeArray<TX  , int > &>>;
-using TraitFloatLong        = ArrayTrait<float, long  , std::greater<NodeArray<float, long> &>>;
+using TraitArrayFloatString = XTrait<float, string>;
+using TraitArrayIntInt      = XTrait<TX  , int   , std::greater<KeyNode<TX  , int > &>>;
+using TraitFloatLong        = XTrait<float, long  , std::greater<KeyNode<float, long> &>>;
 
 // Created by: @ecuadros
 template <typename Traits>
@@ -138,11 +78,19 @@ public:
         cout << "Destroying " << m_name << "..." << endl;
         destroy();
     }
-    void insert(value_type key, LinkedValueType value){
+    void insert(const value_type &key, LinkedValueType value){
         if(m_vcount == m_vmax) // Array is already full?
             resize();
         m_pVect[m_vcount++] = Node(key, value);
         // cout << "Key=" << key << " Value=" << value << "\tinserted, m_vcount=" << m_vcount << " m_vmax=" << m_vmax << endl;
+    }
+    // TODO: remove the last element and returns it
+    Node back(){
+
+    }
+    // TODO: remove the last element only
+    void pop_back(){
+
     }
     void resize       ();
     void destroy(){

@@ -9,6 +9,8 @@ void DemoPreandPostIncrement();
 void DemoArray();
 void DemoIterators();
 void DemoReverseIterators();
+void DemoHeap();
+
 void DemoBinaryTree();
 void DemoHash();
 

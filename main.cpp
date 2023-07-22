@@ -13,9 +13,10 @@ int main()
     // DemoParameters();
     // DemoArray();
     // DemoIterators();
-    //DemoReverseIterators();
-    DemoDynamicMatrixes();
+    // DemoReverseIterators();
+    // DemoDynamicMatrixes();
 
+    DemoHeap();
     // DemoBinaryTree();
     // DemoHash();
 

@@ -243,6 +243,11 @@ void DemoReverseIterators(){
     foreach(v1.rbegin(), v1.rend(), ::print<TX>);
 }
 
+void DemoHeap()
+{
+    cout << "Hello from DemoHeap()" <<endl;
+}
+
 void DemoBinaryTree()
 {
     cout << "Hello from DemoBinaryTree()" <<endl;
