@@ -76,9 +76,6 @@ struct MatrixTrait
     using  value_type   = _K;
     using  Node      = NodeMatrix<_K>;
     //using  CompareFn = _CompareFn;
-    using  value_type   = _K;
-    using  Node      = NodeMatrix<_K>;
-    //using  CompareFn = _CompareFn;
 };
 
 using MatrixTraitFloat = MatrixTrait<float>;
@@ -87,7 +84,6 @@ template <typename Traits>
 class CMatrix
 {public:
     using value_type      = typename Traits::value_type;
-    using Node            = typename Traits::Node;
     using Node            = typename Traits::Node;
     using myself          = CMatrix<Traits>;
     using iterator        = matrix_iterator<myself>;

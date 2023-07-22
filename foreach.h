@@ -44,19 +44,13 @@ template <typename Container, typename F>
 void foreach(Container &container, F ope)
 {  
     foreach(container. begin(), container.end() , ope);
-    foreach(container.rbegin(), container.rend(), ope);
+    // foreach(container.rbegin(), container.rend(), ope);
 }
 
 // template <typename Iterator, typename Callable, typename... Args>
 // void foreach(Iterator ItBegin, Iterator ItEnd, Callable op, Args&&... args)
 // {   foreach(container.begin(), container.end(), ope);
 // }
-
-template <typename Container, typename F>
-void foreach(Container &container, F ope)
-{  
-    foreach(container.begin(), container.end(), ope);
-}
 
 // TODO implementar el foreach inverso
 // # 2
@@ -65,10 +59,10 @@ void foreach(Container &container, F ope)
 // { foreach(container.rbegin(), container.rend(), ope);
 // }
 
-template <typename Container>
-void foreach(Container &container)
-{
-    using T = typename Container::value_type;
+// template <typename Container>
+// void foreach(Container &container)
+// {
+//     using T = typename Container::value_type;
     // using T = typename Container::value_type;
     // foreach(container, print<T>);  cout << endl; // recorre imprimiendo
     // foreach(container, inc<T>);  // recorre incrementando
@@ -81,6 +75,6 @@ void foreach(Container &container)
 //     OperacionEspecial<T> ope; 
 //     foreach(container, ope);  
 //     foreach(container, print<T>);  cout << endl;
-}
+// }
 
 #endif
