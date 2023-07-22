@@ -43,7 +43,8 @@ void foreach(Iterator ItBegin, Iterator ItEnd, F ope)
 template <typename Container, typename F>
 void foreach(Container &container, F ope)
 {  
-    foreach(container.begin(), container.end(), ope);
+    foreach(container. begin(), container.end() , ope);
+    foreach(container.rbegin(), container.rend(), ope);
 }
 
 // template <typename Iterator, typename Callable, typename... Args>
