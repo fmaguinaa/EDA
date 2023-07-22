@@ -92,7 +92,7 @@ public:
     }
     // TODO: remove the last element only
     void pop_back(){
-        // delete m_pVect[m_vcount-1];
+        m_pVect[m_vcount-1] = Node(0, 0);
         m_vcount--;
     }
     void resize       ();
