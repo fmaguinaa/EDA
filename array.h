@@ -86,11 +86,14 @@ public:
     }
     // TODO: remove the last element and returns it
     Node back(){
-
+        Node lastNode = m_pVect[m_vcount-1];
+        pop_back();
+        return lastNode;
     }
     // TODO: remove the last element only
     void pop_back(){
-
+        // delete m_pVect[m_vcount-1];
+        m_vcount--;
     }
     void resize       ();
     void destroy(){
@@ -126,6 +129,10 @@ public:
     {  return m_vcount;    }
     value_type &operator[](size_t pos)
     {   return m_pVect[pos].getDataRef();    }
+
+    Node &index(size_t index){
+        return m_pVect[index]; 
+    }
 
     iterator begin() { iterator iter(this, m_pVect);    return iter;    }
     iterator end()   { iterator iter(this, m_pVect+m_vcount);    return iter;    }
