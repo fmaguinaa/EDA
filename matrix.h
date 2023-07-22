@@ -100,12 +100,15 @@ public:
     //     return res;
     // }
     
-    // value_type &operator()(size_t rows, size_t cols){
+    value_type &operator()(size_t row, size_t col){//b
+        assert( row < m_rows && col < m_cols );
+        return m_ppMatrix[row][col].getDataRef();
+    }
 
-    // }
-    // operator[](size_t row){
-
-    // }
+    Node* operator[](size_t row){
+        assert( row < m_rows );
+        return m_ppMatrix[row];
+    }
 
     // iterator begin() { iterator iter(this, m_ppMatrix);    return iter;    }
     // iterator end()   { iterator iter(this, m_pVect+m_vcount);    return iter;    }
