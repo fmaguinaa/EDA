@@ -1,29 +1,6 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 #include <iostream>
-#include <cassert>
-#include "iterator.h"
-
-template <typename Container>
-class matrix_iterator 
-     : public general_iterator<Container,  class matrix_iterator<Container> > // 
-{public: 
-    // TODO: subir al padre  
-    typedef class general_iterator<Container, matrix_iterator<Container> > Parent; 
-    typedef typename Container::Node           Node; // 
-    typedef matrix_iterator<Container>  myself;
-
-  public:
-    matrix_iterator(Container *pContainer, Node *pNode) 
-            : Parent (pContainer,pNode) {}
-    matrix_iterator(myself &other)  : Parent (other) {}
-    matrix_iterator(myself &&other) : Parent(other) {} // Move constructor C++11 en adelante
-
-public:
-    matrix_iterator operator++() { // Parent::m_pNode--;
-                                          return *this;
-                                 }
-};
 
 template <typename T>
 class NodeMatrix
@@ -45,15 +22,23 @@ public:
     value_type    getData() const   { return m_key; }
     value_type&   getDataRef()      { return m_key; }
 
-    constexpr operator value_type() const noexcept { // since C++14
+    value_type operator+=(const value_type value) {//c
+        m_key += value;
         return m_key;
     }
-    
+
+    constexpr operator value_type() const noexcept { //d since C++14
+        return m_key;
+    }
+
 };
 
 template <typename _K>
 struct MatrixTrait
 {
+    using  value_type   = _K;
+    using  Node      = NodeMatrix<_K>;
+    //using  CompareFn = _CompareFn;
     using  value_type   = _K;
     using  Node      = NodeMatrix<_K>;
     //using  CompareFn = _CompareFn;
@@ -66,10 +51,13 @@ class CMatrix
 {public:
     using value_type      = typename Traits::value_type;
     using Node            = typename Traits::Node;
+    using Node            = typename Traits::Node;
     using myself          = CMatrix<Traits>;
+    //using iterator        = matrix_iterator<myself>;
     //using iterator        = matrix_iterator<myself>;
 
     private:
+        Node **m_ppMatrix   = nullptr;
         Node **m_ppMatrix   = nullptr;
         size_t m_rows = 0, m_cols = 0;
 public:
@@ -80,12 +68,20 @@ public:
         destroy();
     }
 
+    CMatrix(myself &&other){        
+        m_rows = std::move(other.m_rows);
+        m_cols = std::move(other.m_cols);
+        m_ppMatrix = std::move(other.m_ppMatrix);
+    }
+
     void create(size_t rows, size_t cols){
         destroy();
         m_rows = rows;
         m_cols = cols;
         m_ppMatrix = new Node *[m_rows]; //like in array.h
+        m_ppMatrix = new Node *[m_rows]; //like in array.h
         for(auto i = 0 ; i < m_rows ; i++)
+            m_ppMatrix[i] = new Node[m_cols];
             m_ppMatrix[i] = new Node[m_cols];
             // *(res+i) = new TX[m_cols];
             // *(i+res) = new TX[m_cols];
@@ -107,6 +103,7 @@ public:
         os << m_rows << " " << m_cols << endl;
         for(auto y = 0 ; y < m_rows ; y++){
             for(auto x = 0 ; x < m_cols ; x++)
+                //os << m_ppMatrix[y][x] << " ";
                 os << m_ppMatrix[y][x] << " ";
             os << endl;
         }
@@ -118,10 +115,24 @@ public:
         m_ppMatrix = nullptr;
         m_rows = m_cols = 0;
     }
-    // CMatrix<Traits> operator*(const CMatrix<Traits> &other){
-    //     CMatrix<Traits> res(m_rows, other.m_cols);
-        
-    //     return res;
+
+    myself operator*(myself &other){
+        assert(m_cols == other.m_rows);
+        myself answer(m_rows,other.m_cols);
+        myself &me = *this;
+        for(auto row = 0; row < m_rows; row++){
+            for(auto col = 0; col < other.m_cols; col++){
+                answer[row][col] = 0 ; //elimino valores proximos al 0
+                for(auto i = 0 ; i < m_cols ; i++){
+                    answer[row][col] +=  me[row][i] * other[i][col];
+                }
+            }
+        }
+        return answer;
+    }
+    
+    // value_type &operator()(size_t rows, size_t cols){
+
     // }
     
     value_type &operator()(size_t row, size_t col){//b

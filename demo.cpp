@@ -100,8 +100,10 @@ void DemoDynamicMatrixes(){
     mat2.fill(2.5);
     cout << mat2;
 
+    cout << "----------------mat1*mat2--------------------" << endl;
     // TODO #1: overload operator*(CMatrix<Traits> &other)
-    // CMatrix<MatrixTraitFloat> mat3 = mat1 * mat2;
+    CMatrix<MatrixTraitFloat> mat3 = mat1 * mat2;
+    cout << mat3;
 
     // TODO #2: Create Iterator for CMatrix
     // foreach(mat3, ::print<TX>);
