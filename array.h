@@ -5,6 +5,7 @@
 #include <algorithm> // sort algorithm
 #include "types.h"
 #include "iterator.h"
+#include <cassert>
 #include "keynode.h"
 #include "xtrait.h"
 using namespace std;
@@ -92,7 +93,8 @@ public:
     }
     // TODO: remove the last element only
     void pop_back(){
-        m_pVect[m_vcount--] = Node(0, 0);
+        assert(m_vcount > 0);
+        m_vcount--;
     }
     void resize       ();
     void destroy(){
@@ -126,12 +128,8 @@ public:
 
     size_t size()
     {  return m_vcount;    }
-    value_type &operator[](size_t pos)
-    {   return m_pVect[pos].getDataRef();    }
-
-    Node &index(size_t index){
-        return m_pVect[index]; 
-    }
+    Node &operator[](size_t pos)
+    {   return m_pVect[pos];    }
 
     iterator begin() { iterator iter(this, m_pVect);    return iter;    }
     iterator end()   { iterator iter(this, m_pVect+m_vcount);    return iter;    }
