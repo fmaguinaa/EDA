@@ -77,6 +77,7 @@ protected:
        bool            m_Unique;  // Accept the elements only once ?
 };     
 
+// TODO change ObjID by LinkedValueType value
 template <typename Trait>
 bool BTree<Trait>::Insert(const keyType key, const long ObjID){
        bt_ErrorCode error = m_Root.Insert(key, ObjID);
@@ -103,5 +104,9 @@ bool BTree<Trait>::Remove (const keyType key, const long ObjID)
                m_Height--;
        return true;
 }
+
+// TODO Add operator<<
+
+// TODO Add operator>>
 
 #endif
