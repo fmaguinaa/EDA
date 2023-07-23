@@ -16,7 +16,7 @@ public:
 private:
   using Parent = NodeBinaryTree<T> Node;
   public:
-    size_t m_depth; 
+    size_t m_depth = 1; 
   public:
     NodeAVL(Node *pParent, T data, Node *p0 = nullptr, Node *p1 = nullptr) 
         : Parent(pParent, p0, p1)
@@ -55,17 +55,9 @@ class CAVL: public BinaryTree
 protected:
 public: 
     // TODO: insert must receive two paramaters: elem and LinkedValueType value
-    virtual void    insert(value_type &elem)
-    { 
-        internal_insert1(elem, nullptr, m_pRoot); 
+    virtual void    insert(value_type &elem, LinkedValueType value){ 
+        Parent::internal_insert(elem, nullptr, m_pRoot); 
     }
-
-protected:
-    
-public:
-    
-protected:
-    
 };
 
 #endif

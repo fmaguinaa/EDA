@@ -91,11 +91,11 @@ public:
     size_t  size()  const       { return m_size;       }
     bool    empty() const       { return size() == 0;  }
     // TODO: insert must receive two paramaters: elem and LinkedValueType value
-    virtual void    insert(value_type &elem) { internal_insert1(elem, nullptr, m_pRoot);  }
+    virtual void    insert(value_type &elem, LinkedValueType value) { internal_insert(elem, value, nullptr, m_pRoot);  }
 
 protected:
     Node *CreateNode(Node *pParent, value_type &elem){ return new Node(pParent, elem); }
-    Node *internal_insert1(value_type &elem, Node *pParent, Node *&rpOrigin)
+    Node *internal_insert(value_type &elem, LinkedValueType value, Node *pParent, Node *&rpOrigin)
     {
         if( !rpOrigin ) //  llegué al fondo de una rama
         {   ++m_size;
