@@ -91,7 +91,7 @@ public:
     size_t  size()  const       { return m_size;       }
     bool    empty() const       { return size() == 0;  }
     // TODO: insert must receive two paramaters: elem and LinkedValueType value
-    void    insert(value_type &elem) { internal_insert1(elem, nullptr, m_pRoot);  }
+    virtual void    insert(value_type &elem) { internal_insert1(elem, nullptr, m_pRoot);  }
 
 protected:
     Node *CreateNode(Node *pParent, value_type &elem){ return new Node(pParent, elem); }
@@ -104,6 +104,7 @@ protected:
         size_t branch = Compfn(elem, rpOrigin->getDataRef() );
         return internal_insert1(elem, rpOrigin, rpOrigin->getChildRef(branch));
     }
+    // virtual void balance()
 public:
     void inorder  (ostream &os)    {   inorder  (m_pRoot, os, 0);  }
     void postorder(ostream &os)    {   postorder(m_pRoot, os, 0);  }
