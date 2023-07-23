@@ -254,7 +254,9 @@ void DemoHeap()
     heap.insert(12, 25);
     heap.insert(8 , 17);
 
+    cout << "Before Pop()" << endl;
     heap.print(cout);
+    cout << "After Pop()" << endl;
     heap.pop();
     heap.print(cout);
 }
