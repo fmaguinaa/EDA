@@ -257,11 +257,11 @@ bool CBTreePage<Trait>::Redistribute1(size_t &pos)
        else // it is due to overflow
        {
                size_t FreeCellsOnLeft = GetFreeCellsOnLeft(pos),   // Free Cells On Left
-               fcor = GetFreeCellsOnRight(pos);  // Free Cells On Right
+                      FreeCellsOnRight= GetFreeCellsOnRight(pos);  // Free Cells On Right
 
-               if( !FreeCellsOnLeft && !fcor && m_SubPages[pos]->IsFull() )
+               if( !FreeCellsOnLeft && !FreeCellsOnRight && m_SubPages[pos]->IsFull() )
                        return false;
-               if( FreeCellsOnLeft > fcor ) // There is more space on left
+               if( FreeCellsOnLeft > FreeCellsOnRight ) // There is more space on left
                        RedistributeR2L(pos);
                else
                        RedistributeL2R(pos);
@@ -335,7 +335,7 @@ template <typename Trait>
 void CBTreePage<Trait>::RedistributeL2R(size_t pos)
 {
        BTPage  *pSource = m_SubPages[pos],
-                       *pTarget = m_SubPages[pos+1];
+               *pTarget = m_SubPages[pos+1];
        while(pSource->GetNumberOfKeys() > pSource->MinNumberOfKeys() &&
                  pTarget->GetNumberOfKeys() < pSource->GetNumberOfKeys() )
        {
@@ -470,7 +470,7 @@ bool CBTreePage<Trait>::SplitRoot()
 {
        BTPage  *pChild1 = 0, *pChild2 = 0, *pChild3 = 0;
        ObjectInfo oi1, oi2;
-       SplitPageInto3( m_Keys,m_SubPages,pChild1, pChild2, pChild3, oi1, oi2);
+       SplitPageInto3(m_Keys, m_SubPages,pChild1, pChild2, pChild3, oi1, oi2);
        clear();
 
        // copy the first element to the root

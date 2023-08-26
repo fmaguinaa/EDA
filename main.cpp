@@ -16,12 +16,14 @@ int main()
     // DemoReverseIterators();
     // DemoDynamicMatrixes();
 
-    DemoHeap();
+    // DemoHeap();
     // DemoBinaryTree();
     // DemoHash();
 
     // DemoPreandPostIncrement();
     // DemoSmartPointers();
+
+    DemoMap();
     
     return 0;
 }

@@ -1,5 +1,6 @@
 #include <iostream> // cout
 #include <fstream>  // ofstream, ifstream
+#include <map>
 #include <cmath>
 #include <memory>
 #include "demo.h"
@@ -185,7 +186,7 @@ void DemoArray(){
     of << v2 << endl; 
     cout << "DemoArray finished !" << endl;
 
-    using TraitStringString = ArrayTrait<string, string  , std::less<NodeArray<string, string> &>>;
+    using TraitStringString = XTrait<string, string  , less<KeyNode<string, string> &>>;
     CArray< TraitStringString > vx("Ernesto Cuadros");
     vx.insert("Ernesto", "Cuadros");
     vx.insert("Luis"   , "Tejada");
@@ -374,3 +375,30 @@ void DemoHash()
 
 // }
 
+void DemoMap(){
+    map<int, string> m;
+    m[1000] = "Francisco";
+    m[500]  = "Guiomar";
+    m[1300] = "Jorge";
+    m[2000] = "Eduardo";
+    m[600]  = "Lucero";
+    m[100]  = "Edson";
+    m[800]  = "Luis";
+    m[700]  = "Cristian";
+    m[900]  = "Pier";
+    m[750]  = "Ernesto";
+
+    // iterate using C++17 facilities
+    for (const auto& [key, value] : m)
+        cout << '[' << key << "] = " << value << "; " << endl;
+    
+    // C++11 alternative:
+    //  for (const auto& n : m)
+    //      cout << n.first << " = " << n.second << "; ";
+    //
+    // C++98 alternative modified to use auto
+    for (auto it = m.rbegin(); it != m.rend(); it++)
+        cout << it->first << " = " << it->second << "; " << endl;
+ 
+
+}
