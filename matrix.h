@@ -189,7 +189,7 @@ public:
         os << m_rows << " " << m_cols << endl;
         for(auto y = 0 ; y < m_rows ; y++){
             for(auto x = 0 ; x < m_cols ; x++)
-                os << m_ppMatrix[y][x].getDataRef() << " ";
+                os << m_ppMatrix[y][x] << " ";
             os << endl;
         }
     }
