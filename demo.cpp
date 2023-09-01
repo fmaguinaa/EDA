@@ -91,34 +91,46 @@ void DemoDynamicMatrixes(){
 
     CMatrix<MatrixTraitFloat> mat1(3, 4);
     mat1.fill(1);
+    cout << "matrix 1" << endl;
     cout << mat1;
 
     CMatrix<MatrixTraitFloat> mat2(4, 5);
+    cout << "matrix 2" << endl;
     mat2.fill(2.5);
     cout << mat2;
 
     // TODO #1: overload operator*(CMatrix<Traits> &other)
     CMatrix<MatrixTraitFloat> mat3 = mat1 * mat2;
+    cout << "matrix 1 * matrix 2" << endl;
     cout << mat3;
-
+    cout << endl;
     // TODO #2: Create Iterator for CMatrix
-    // recorrer(mat3, ::print<TX>);
-    // cout << endl;
+    cout << "Iterating Matrix" << endl;
+    recorrer(mat3, ::print<TX>);
+    cout << endl;
 
-    // TX x = 1;
-    // // Lambda function
-    // recorrer(mat1, [x](TX &n){ n += x; x++; });
-    // recorrer(mat1, ::print<TX>); cout << endl;
-    // ClassX<TX> ope(5);
-    // recorrer(mat1, ope);
-    // recorrer(mat1, ::print<TX>); cout << endl;
-    // recorrer(mat1, ClassX<TX>(8) );
-    // recorrer(mat1, ::print<TX>); cout << endl;
+    TX x = 1;
+    // Lambda function
+    cout << "add counter to mat1" << endl;
+    recorrer(mat1, [&x](TX &n){ n += x; x++; });
+    recorrer(mat1, ::print<TX>); cout << endl;
+    ClassX<TX> ope(5);
+    cout << "add operation 5 to mat1" << endl;
+    recorrer(mat1, ope);
+    recorrer(mat1, ::print<TX>); cout << endl;
+    cout << "add operation 8 to mat1" << endl;
+    recorrer(mat1, ClassX<TX>(8) );
+    recorrer(mat1, ::print<TX>); cout << endl;
 
-    // // TODO #3: prepare Matrix to be used as a matrix from outside
-    // // overload operator[](size_t row)
+    cout << endl;
+    // TODO #3: prepare Matrix to be used as a matrix from outside
+    // overload operator[](size_t row)
+    cout << "changing values in matrix 1" << endl;
+    cout << "before changes using operators () and []" << endl;
+    cout << mat1;
     mat1[2][3] = 8.2;
     mat1(2, 2) = 7.5; // Operator () is returning a value_type &
+    cout << "after changes" << endl;
     cout << mat1;
 }
 
