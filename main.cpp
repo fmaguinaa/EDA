@@ -16,8 +16,9 @@ int main()
     // DemoReverseIterators();
     // DemoDynamicMatrixes();
 
-    DemoHeap();
+    // DemoHeap();
     // DemoBinaryTree();
+    DemoAVLTree();
     // DemoHash();
 
     // DemoPreandPostIncrement();

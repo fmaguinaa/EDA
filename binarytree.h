@@ -1,87 +1,97 @@
 #ifndef __BINARY_TREE_H__  
 #define __BINARY_TREE_H__ 
-//#include <utility>
-//#include <algorithm>
+#include <string>
 #include <cassert>
 #include "types.h"
-//#include "util.h"
+#include "keynode.h"
+#include "xtrait.h"
+#include "tree_iterators.h"
+
 using namespace std;
 
-template <typename T>
-class NodeBinaryTree
+template <typename T, typename V>
+class NodeBinaryTree : public KeyNode<T, V>
 {
 public:
-    // TODO: Change T by KeyNode
-  typedef T         Type;
+    using Type              = T;
+    using value_type        = T;
+    using LinkedValueType   = V;
+    using Parent            = class KeyNode<T, V>;
+
 private:
-  typedef NodeBinaryTree<T> Node;
-  public:
-    T       m_data;
-    Node *  m_pParent = nullptr;
-    vector<Node *> m_pChild = {nullptr, nullptr}; // 2 hijos inicializados en nullptr
-  public:
-    NodeBinaryTree(Node *pParent, T data, Node *p0 = nullptr, Node *p1 = nullptr) 
-        : m_pParent(pParent), m_data(data)
+    typedef NodeBinaryTree<T, V> Node;
+
+public:
+    Node*          m_pParent    = nullptr;
+    vector<Node *> m_pChild     = {nullptr, nullptr}; // 2 hijos inicializados en nullptr
+    size_t         m_level      = 0;
+    bool           m_visited    = false;
+    size_t         m_depth      = 1; 
+
+public:
+    NodeBinaryTree(
+        value_type key, LinkedValueType value, Node *pParent = nullptr,
+        size_t level = 0, Node *p0 = nullptr, Node *p1 = nullptr) 
+        : m_pParent(pParent) , m_level(level), Parent(key, value)
     {   m_pChild[0] = p0;   m_pChild[1] = p1;   }
 
-// TODO: Keynode 
-    T         getData()                {   return m_data;    }
-    T        &getDataRef()             {   return m_data;    }
- 
- // TODO: review if these functions must remain public/private
-    void      setpChild(const Node *pChild, size_t pos)  {   m_pChild[pos] = pChild;  }
+    NodeBinaryTree(
+        value_type key, Node *pParent = nullptr,
+        size_t level = 0, Node *p0 = nullptr, Node *p1 = nullptr) 
+        : m_pParent(pParent) , m_level(level)
+    {   Parent::m_key = key; m_pChild[0] = p0;   m_pChild[1] = p1;   }
+
+    NodeBinaryTree(){}
+
+    void      setChild(const Node *pChild, size_t pos)  {   m_pChild[pos] = pChild;  }
     Node    * getChild(size_t branch){ return m_pChild[branch];  }
     Node    *&getChildRef(size_t branch){ return m_pChild[branch];  }
     Node    * getParent() { return m_pParent;   }
+
+    size_t getLevel(){return m_level;}
+    bool getVisited(){return m_visited;}
+    void setVisited(bool visited){m_visited = visited;}
+
+    size_t getDepth(){return m_depth;}
+    void   setDepth(size_t depth){m_depth = depth;}
+    
+    size_t getDepth(size_t branch){
+        Node* child = getChild(branch);
+        if(!child){ return 0; }
+        return child->getDepth();
+    }
+    virtual void   updateDepth();
+    virtual size_t getBalance();
 };
 
-#define _DEF(_Container, _iter)  \
-public: \
-    typedef class general_iterator<_Container, _iter<Container> > Parent;     \
-    typedef typename _Container::Node                             Node;       \
-    typedef _iter<_Container>                                     myself;
-
-template <typename Container>
-class binary_tree_iterator : public general_iterator<Container,  class binary_tree_iterator<Container> > // 
-{  _DEF(Container, binary_tree_iterator); // TODO: llevar esta misma idea a todos container ya existentes
-
-  public:
-    binary_tree_iterator(Container *pContainer, Node *pNode) : Parent (pContainer,pNode) {}
-    binary_tree_iterator(myself &other)  : Parent (other) {}
-    binary_tree_iterator(myself &&other) : Parent(other) {} // Move constructor C++11 en adelante
-
-public:
-    binary_tree_iterator operator++() { //Parent::m_pNode = (Node *)Parent::m_pNode->getpNext();  
-                                        return *this;
-                                  }
-};
-
-template <typename _T>
-struct BinaryTreeAscTraits
+template <typename _T, typename _V, class _Node = NodeBinaryTree<_T, _V>,
+          typename _CompareFn = std::less< _Node >>
+struct BinaryTreeTrait
 {
-    using  T         = _T;
-    using  Node      = NodeBinaryTree<T>;
-    using  CompareFn = less<T>;
+    using  value_type       = _T;
+    using  LinkedValueType  = _V;
+    using  Node             = _Node;
+    using  CompareFn        = _CompareFn;
 };
 
-template <typename _T>
-struct BinaryTreeDescTraits
-{
-    using  T         = _T;
-    using  Node      = NodeBinaryTree<T>;
-    using  CompareFn = greater<T>;
-};
+using BinaryTreeTraitIntIntAsc      = BinaryTreeTrait<int  , int   , NodeBinaryTree<int, int >,      std::less<NodeBinaryTree<int, int> >>;
+using BinaryTreeTraitFloatStringAsc = BinaryTreeTrait<float, string, NodeBinaryTree<float, string >, std::greater<NodeBinaryTree<float, string> >>;
+
 
 template <typename Traits>
 class BinaryTree
 {
   public:
-    typedef typename Traits::T          value_type;
-    typedef typename Traits::Node       Node;
-    
-    typedef typename Traits::CompareFn      CompareFn;
-    typedef BinaryTree<Traits>              myself;
-    typedef binary_tree_iterator<myself>    iterator;
+    typedef typename Traits::value_type         value_type;
+    typedef typename Traits::LinkedValueType    LinkedValueType;
+    typedef typename Traits::Node               Node;
+    typedef typename Traits::CompareFn          CompareFn;
+
+    typedef BinaryTree<Traits>                  myself;
+    typedef preorder_iterator<myself>           pre_iterator;
+    typedef inorder_iterator<myself>            in_iterator;
+    typedef postorder_iterator<myself>          post_iterator;
+    typedef printer_iterator<myself>            print_iterator;
 
 protected:
     Node    *m_pRoot = nullptr;
@@ -90,86 +100,60 @@ protected:
 public: 
     size_t  size()  const       { return m_size;       }
     bool    empty() const       { return size() == 0;  }
-    // TODO: insert must receive two paramaters: elem and LinkedValueType value
-    virtual void    insert(value_type &elem) { internal_insert1(elem, nullptr, m_pRoot);  }
+    virtual void    insert(value_type &key, LinkedValueType &value) { internal_insert(key, value, nullptr, m_pRoot, 0);  }
 
+    in_iterator     inbegin     () {in_iterator     iter(this,  furthestLeft(m_pRoot)); return iter;}
+    in_iterator     inend       () {in_iterator     iter(this, furthestRight(m_pRoot)); return iter;}
+    pre_iterator    prebegin    () {pre_iterator    iter(this,               m_pRoot);  return iter;}
+    pre_iterator    preend      () {pre_iterator    iter(this, furthestRight(m_pRoot)); return iter;}
+    post_iterator   postbegin   () {post_iterator   iter(this,  furthestLeft(m_pRoot)); return iter;}
+    post_iterator   postend     () {post_iterator   iter(this,               m_pRoot);  return iter;}
+    print_iterator  printbegin  () {print_iterator  iter(this, furthestRight(m_pRoot)); return iter;}
+    print_iterator  printend    () {print_iterator  iter(this,  furthestLeft(m_pRoot)); return iter;}
+    
 protected:
-    Node *CreateNode(Node *pParent, value_type &elem){ return new Node(pParent, elem); }
-    Node *internal_insert1(value_type &elem, Node *pParent, Node *&rpOrigin)
+    Node *CreateNode(value_type &key, LinkedValueType &value, Node *pParent, size_t level)
+    {   return new Node(key, value, pParent, level); }
+    Node *internal_insert(
+        value_type &key, LinkedValueType &value, Node *pParent,
+        Node *&rpOrigin, size_t level = 0)
     {
         if( !rpOrigin ) //  llegué al fondo de una rama
         {   ++m_size;
-            return (rpOrigin = CreateNode(pParent, elem));
+            return (rpOrigin = CreateNode(key, value, pParent, level));
         }
-        size_t branch = Compfn(elem, rpOrigin->getDataRef() );
-        return internal_insert1(elem, rpOrigin, rpOrigin->getChildRef(branch));
+        size_t branch = Compfn(key, rpOrigin->getDataRef() );
+        return internal_insert(key, value, rpOrigin, rpOrigin->getChildRef(branch), level+1);
     }
-    // virtual void balance()
+    virtual void balance(){}
+    Node* furthestBranch(Node *pNode, size_t child){
+        assert(pNode != nullptr);
+        while(pNode->getChild(child) != nullptr){
+            pNode = pNode->getChild(child);
+        }
+        return pNode;
+    }
+    Node* furthestLeft(Node *pNode) { return furthestBranch(pNode, 0);}
+    Node* furthestRight(Node *pNode){ return furthestBranch(pNode, 1);}
 public:
-    void inorder  (ostream &os)    {   inorder  (m_pRoot, os, 0);  }
-    void postorder(ostream &os)    {   postorder(m_pRoot, os, 0);  }
-    void preorder (ostream &os)    {   preorder (m_pRoot, os, 0);  }
-    void print    (ostream &os)    {   print    (m_pRoot, os, 0);  }
-    void inorder(void (*visit) (value_type& item))
-    {   inorder(m_pRoot, visit);    }
-
-protected:
-    void inorder(Node  *pNode, ostream &os, size_t level)
-    {
-        // foreach(*this, fn);
-        // foreach(begin(), end(), fn);
-        if( pNode )
-        {   Node *pParent = pNode->getParent();
-            inorder(pNode->getChild(0), os, level+1);
-            os << " --> " << pNode->getDataRef();
-            inorder(pNode->getChild(1), os, level+1);
-        }
+    template <typename F, typename... Args>
+    void inorder(F func, Args&&... args){
+        foreach(inbegin(), inend(), func, args...);
     }
 
-    // TODO: generalize this function by using iterators and apply any function
-    // Create a new iterator to walk in postorder
-    void postorder(Node  *pNode, ostream &os, size_t level){
-        //foreach(postorderbegin(), postorderend(), fn)
-        if( pNode ){   
-            postorder(pNode->getChild(0), os, level+1);
-            postorder(pNode->getChild(1), os, level+1);
-            os << " --> " << pNode->getDataRef();
-        }
+    template <typename F, typename... Args>
+    void preorder(F func, Args&&... args){
+        foreach(prebegin(), preend(), func, args...);
     }
 
-    // TODO: generalize this function by using iterators and apply any function
-    // Create a new iterator to walk in postorder
-    void preorder(Node  *pNode, ostream &os, size_t level){
-        //foreach(preorderbegin(), preorderend(), fn)
-        if( pNode ){   
-            os << " --> " << pNode->getDataRef();
-            preorder(pNode->getChild(0), os, level+1);
-            preorder(pNode->getChild(1), os, level+1);            
-        }
-    }
-    
-    // TODO: generalize this function by using iterators and apply any function
-    void print(Node  *pNode, ostream &os, size_t level)
-    {
-        // foreach(begin(), end(), print);
-        if( pNode ){
-            Node *pParent = pNode->getParent();
-            print(pNode->getChild(1), os, level+1);
-            //os << string(" | ") * level << pNode->getDataRef() << "(" << (pParent?(pNode->getBranch()?"R-":"L-") + to_string(pParent->getData()):"Root") << ")" <<endl;
-            os << string(" | ") * level << pNode->getDataRef() << "(" << (pParent?to_string(pParent->getData()):"Root") << ")" <<endl;
-            print(pNode->getChild(0), os, level+1);
-        }
+    template <typename F, typename... Args>
+    void postorder(F func, Args&&... args){
+        foreach(postbegin(), postend(), func, args...);
     }
 
-    // TODO: generalize this function by using iterators and apply any function
-    void inorder(Node  *pNode, void (*visit) (value_type& item))
-    {
-        if( pNode )
-        {   
-            inorder(pNode->getChild(0), *visit);
-            (*visit)(pNode->getDataRef());
-            inorder(pNode->getChild(1), *visit);
-        }
+    template <typename F, typename... Args>
+    void print(F func, Args&&... args){
+        foreach(printbegin(), printend(), func, args...);
     }
 };
 

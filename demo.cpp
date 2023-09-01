@@ -2,10 +2,14 @@
 #include <fstream>  // ofstream, ifstream
 #include <cmath>
 #include <memory>
+#include <string>
 #include "demo.h"
 #include "array.h"
 #include "matrix.h"
 #include "foreach.h"
+#include "binarytree.h"
+#include "avl.h"
+
 using namespace std;
 
 template <typename T, int N>
@@ -185,7 +189,7 @@ void DemoArray(){
     of << v2 << endl; 
     cout << "DemoArray finished !" << endl;
 
-    using TraitStringString = ArrayTrait<string, string  , std::less<NodeArray<string, string> &>>;
+    using TraitStringString = XTrait<string, string  , std::less<KeyNode<string, string> &>>;
     CArray< TraitStringString > vx("Ernesto Cuadros");
     vx.insert("Ernesto", "Cuadros");
     vx.insert("Luis"   , "Tejada");
@@ -248,9 +252,125 @@ void DemoHeap()
     cout << "Hello from DemoHeap()" <<endl;
 }
 
-void DemoBinaryTree()
-{
-    cout << "Hello from DemoBinaryTree()" <<endl;
+string operator*(string text, size_t n){
+    string res = "";
+    for (size_t i = 0; i < n; i++){
+        res += text;
+    }
+    return res;
+}
+
+template <typename Node>
+void printAsLine(Node &node, ostream &os){
+    os << " => (" << node.getData() << " : " << node.getValue() << ")";
+}
+
+template <typename Node>
+void printAsTree(Node &node, ostream &os){
+    string whitespace = string(" ") * 4 * node.getLevel();
+    string parent = node.getParent() ? to_string(node.getParent()->getData()) : "Root";
+    string keyValue = to_string(node.getData()) + " : " + to_string(node.getValue()) + " (" + parent + ")";
+    os << whitespace << keyValue << endl;
+}
+
+void DemoBinaryTree(){
+    BinaryTree< BinaryTreeTraitIntIntAsc > binaryTree;
+
+    using value_type      = typename BinaryTreeTraitIntIntAsc::value_type;
+    using LinkedValueType = typename BinaryTreeTraitIntIntAsc::LinkedValueType;
+    using Node            = typename BinaryTreeTraitIntIntAsc::Node;
+
+    vector<Node> nodes= {
+        Node(50, 1),
+        Node(30, 2),
+        Node(20, 3),
+        Node(80, 4),
+        Node(60, 5),
+        Node(70, 6),
+        Node(40, 7),
+        Node(90, 8)
+    };
+    for(auto node : nodes){
+        binaryTree.insert(node.getDataRef(), node.getValueRef());
+    }
+    cout << "Binary Tree IntIntAsc" << endl;
+
+    cout << "Key : Linked Value (Parent)" << endl;
+    binaryTree.print(printAsTree<Node>, cout);
+    cout << endl << endl;
+
+    cout << "In Order" << endl;
+    binaryTree.inorder(printAsLine<Node>, cout);
+    cout << endl << endl;
+
+    cout << "Pre Order" << endl;
+    binaryTree.preorder(printAsLine<Node>, cout);
+    cout << endl << endl;
+
+    cout << "Post Order" << endl;
+    binaryTree.postorder(printAsLine<Node>, cout);
+    cout << endl << endl;
+
+    cout << "Iterating and operating over linked value" << endl;
+    LinkedValueType value = 1;
+    binaryTree.inorder(
+        [](Node &node, LinkedValueType &value) {
+            node.getValueRef() = node.getValue() + value;
+        }, value);
+
+    cout << "Printing inline after iteration" << endl;
+    binaryTree.print(printAsLine<Node>, cout);
+    cout << endl << endl;
+}
+
+void DemoAVLTree(){
+    CAVL< AVLTreeTraitIntIntAsc > avlTree;
+
+    using value_type      = typename AVLTreeTraitIntIntAsc::value_type;
+    using LinkedValueType = typename AVLTreeTraitIntIntAsc::LinkedValueType;
+    using Node            = typename AVLTreeTraitIntIntAsc::Node;
+
+    vector<Node> nodes= {
+        Node(50, 1),
+        Node(30, 2),
+        Node(20, 3),
+        Node(80, 4),
+        Node(60, 5),
+        Node(70, 6),
+        Node(40, 7),
+        Node(90, 8)
+    };
+    for(auto node : nodes){
+        avlTree.insert(node.getDataRef(), node.getValueRef());
+    }
+    // cout << "AVL Tree IntIntAsc" << endl;
+
+    // cout << "Key : Linked Value (Parent)" << endl;
+    // avlTree.print(printAsTree<Node>, cout);
+    // cout << endl << endl;
+
+    // cout << "In Order" << endl;
+    // avlTree.inorder(printAsLine<Node>, cout);
+    // cout << endl << endl;
+
+    // cout << "Pre Order" << endl;
+    // avlTree.preorder(printAsLine<Node>, cout);
+    // cout << endl << endl;
+
+    // cout << "Post Order" << endl;
+    // avlTree.postorder(printAsLine<Node>, cout);
+    // cout << endl << endl;
+
+    // cout << "Iterating and operating over linked value" << endl;
+    // LinkedValueType value = 1;
+    // avlTree.inorder(
+    //     [](Node &node, LinkedValueType &value) {
+    //         node.getValueRef() = node.getValue() + value;
+    //     }, value);
+
+    // cout << "Printing inline after iteration" << endl;
+    // avlTree.print(printAsLine<Node>, cout);
+    // cout << endl << endl;
 }
 
 void DemoHash()

@@ -46,6 +46,13 @@ public:
     bool operator>(const KeyNode<T, V>& other) const { 
         return m_key > other.m_key;
     }
+
+    constexpr operator value_type() const noexcept {
+        return m_key;
+    }
+    constexpr value_type operator() () const noexcept { // since C++14
+        return m_key;
+    }
 };
 
 #endif
