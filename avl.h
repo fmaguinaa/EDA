@@ -8,58 +8,6 @@
 //#include "util.h"
 using namespace std;
 
-template <typename T, typename V>
-class NodeAVL : public NodeBinaryTree<T, V> {
-public:
-    using Type              = T;
-    using value_type        = T;
-    using LinkedValueType   = V;
-    using Parent            = class NodeBinaryTree<T, V>;
-
-private:
-    typedef NodeAVL<T, V> Node;
-public:
-    NodeAVL(
-      value_type key, LinkedValueType value, Node *pParent = nullptr,
-      size_t level = 0, size_t depth = 1, Node *p0 = nullptr, Node *p1 = nullptr) 
-      : Parent(key, value, pParent, level, p0, p1) 
-    {Parent::m_depth = depth;}
-
-    NodeAVL(
-      value_type key, Node *pParent = nullptr,
-      size_t level = 0, size_t depth = 1, Node *p0 = nullptr, Node *p1 = nullptr) 
-      : Parent(key, pParent, level, p0, p1)
-    {Parent::m_depth = depth;}
-
-    NodeAVL(
-      value_type key, Node *pParent = nullptr,
-      size_t level = 0, Node *p0 = nullptr, Node *p1 = nullptr) 
-      : Parent(key, pParent, level, p0, p1)
-    {}
-
-    NodeAVL(){}
-
-    void   updateDepth(){
-        Parent::setDepth(max(Parent::getDepth(0), Parent::getDepth(1)) + 1);
-    }
-    size_t getBalance(){
-        return Parent::getDepth(0) - Parent::getDepth(1);
-    }
-};
-
-template <typename _T, typename _V, class _Node = NodeAVL<_T, _V>,
-          typename _CompareFn = std::less< _Node >>
-struct AVLTreeTrait
-{
-    using  value_type       = _T;
-    using  LinkedValueType  = _V;
-    using  Node             = _Node;
-    using  CompareFn        = _CompareFn;
-};
-
-using AVLTreeTraitIntIntAsc       = AVLTreeTrait<int  , int   , NodeAVL<int, int>     , std::less<NodeAVL<int, int>> >;
-using AVLTreeTraitFloatStringDesc = AVLTreeTrait<float, string, NodeAVL<float, string>, std::greater<NodeAVL<float, string>> >;
-
 template <typename Traits>
 class CAVL: public BinaryTree<Traits>
 {
@@ -69,82 +17,125 @@ class CAVL: public BinaryTree<Traits>
     typedef typename Traits::Node             Node;
     typedef typename Traits::CompareFn        CompareFn;
 
-    // typedef BinaryTree<Traits>                Parent;
-    using Parent            = class BinaryTree<Traits>;
+    typedef BinaryTree<Traits>                Parent;
     typedef CAVL<Traits>                      myself;
 
 protected:
 public: 
 
+    size_t getDepth(Node* node){
+        if(!node) return 0;
+        return node->getDepth();
+    }
+
+    void updateDepth(Node* node){
+        node->setDepth(max(getDepth(node->getChildRef(0)), getDepth(node->getChildRef(1))) + 1);
+    }
+
+    int getBalance(Node* node){
+        if(!node) return 0;
+        return getDepth(node->getChildRef(0)) - getDepth(node->getChildRef(1));
+    }
+
     Node *CreateNode(value_type &key, LinkedValueType &value, Node *pParent, size_t level, size_t depth)
     {   return new Node(key, value, pParent, level, depth); }
 
-    Node *internal_insert(
-        value_type &key, LinkedValueType &value, Node *pParent,
-        Node *&rpOrigin, size_t level = 0, size_t depth = 1)
-    {
-        Node *newNode = Parent::internal_insert(key, value, pParent, rpOrigin, level);
-        newNode->updateDepth();
-        size_t balance = newNode->getBalance();
-
-        // // Left Left Case
-        // if (balance > 1 && Parent::Compfn(key, newNode->getChild(0)->getDataRef()))
-        //     return rightRotate(newNode);
-
-        // // Right Right Case
-        // if (balance < 1 && !Parent::Compfn(key, newNode->getChild(1)->getDataRef()))
-        //     return leftRotate(newNode);
-
-        // // Left Right Case
-        // if (balance > -1 && !Parent::Compfn(key, newNode->getChild(0)->getDataRef())) {
-        //     newNode->setChild(leftRotate(newNode->getChild(0)), 0);
-        //     return rightRotate(newNode);
-        // }
-
-        // // Right Left Case
-        // if (balance < -1 && Parent::Compfn(key, newNode->getChild(1)->getDataRef())) {
-        //     newNode->setChild(leftRotate(newNode->getChild(1)), 1);
-        //     return leftRotate(newNode);
-        // }
-
-        return newNode;
+    void balance(Node* node, Node*& root){
+        updateDepth(node);
+        Node* parent = node->getParent();
+        int nodeBalance = getBalance(node);
+        if(nodeBalance < -1 || nodeBalance > 1){
+            size_t child = -1;
+            if(parent) child = parent->getChild(1) == node;
+            if(nodeBalance == -2){
+                // Left Left Case
+                if(getBalance(node->getChild(1)) == -1){
+                    root = leftRotate(node, parent);
+                }
+                // Right Left Case
+                if(getBalance(node->getChild(1)) == 1){
+                    node->getChildRef(1) = rightRotate(node->getChildRef(1), node);
+                    root = leftRotate(node, parent);
+                }
+            }
+            if(nodeBalance == 2){
+                // Right Right Case
+                if(getBalance(node->getChild(0)) == 1){
+                    root = rightRotate(node, parent);
+                }
+                // Left Right Case
+                if(getBalance(node->getChild(0)) == -1){
+                    node->getChildRef(0) = leftRotate(node->getChildRef(0), node);
+                    root = rightRotate(node, parent);
+                }
+            }
+            if(parent) parent->setChild(root, child);
+            else Parent::m_pRoot = root;
+        }
+        if(parent) balance(parent, root);
     }
 
     void insert(value_type &key, LinkedValueType &value) { 
-        internal_insert(key, value, nullptr, Parent::m_pRoot, 0, 1); 
+        Node* newNode = Parent::internal_insert(key, value, nullptr, Parent::m_pRoot, 0);
+        Node* newRoot = nullptr;
+        if(newNode->getParent()) balance(newNode->getParent(), newRoot);
     }
 
-    Node* rightRotate(Node* y){
+    void setChildParent(Node *parent, Node *child, size_t branch){
+        parent->getChildRef(branch) = child;
+        if (child) child->setParent(parent);
+    }
+
+    Node* rightRotate(Node* y, Node* parent){
         Node* x = y->getChild(0);
         Node* T2 = x->getChild(1);
-        x->setChild(y, 1);
-        y->setParent(x);
-        y->setChild(T2, 0);
-        T2->setParent(y);
-        x->updateDepth();
-        y->updateDepth();
+        setChildParent(x, y, 1);
+        setChildParent(y, T2, 0);
+        x->setParent(parent);
+        updateDepth(x);
+        updateDepth(y);
         return x;
     }
 
-    Node* leftRotate(Node* x){
-        Node* y = x->getChild(1);
-        Node* T2 = x->getChild(0);
-        y->setChild(x, 0);
-        x->setParent(y);
-        x->setChild(T2, 1);
-        T2->setParent(x);
-        x->updateDepth();
-        y->updateDepth();
+    Node* leftRotate(Node* x, Node* parent){
+        Node* y = x->getChildRef(1);
+        Node* T2 = x->getChildRef(0);
+        setChildParent(y, x, 0);
+        setChildParent(x, T2, 1);
+        y->setParent(parent);
+        updateDepth(x);
+        updateDepth(y);
         return y;
     }
+public:
 
-
-// protected:
-    
-// public:
-    
-// protected:
-    
+    void print        (ostream &os){
+        Parent::preorder([](Node &node){
+            node.setLevel((node.getParent() ? node.getParent()->getLevel() : -1) + 1);
+        });
+        foreach(Parent::printbegin(), Parent::printend(), [](Node &node, ostream& os){
+            string whitespace = "";
+            for(size_t i = 0; i < 6 * node.getLevel(); i++ )
+                whitespace += " ";
+            string parent = node.getParent() ? to_string(node.getParent()->getData()) : "Root";
+            string keyValue = to_string(node.getData()) + " : " + to_string(node.getValue()) + " (" + parent + ") [" + to_string(node.getDepth()) +"]";
+            os << whitespace << keyValue << endl;
+        }, os);
+    }
 };
+
+template<typename Traits>
+ostream& operator<<(ostream& os, CAVL<Traits>& tree)
+{
+    tree.print(os);
+    return os;
+}
+
+template<typename Traits>
+istream& operator>>(istream& is, CAVL<Traits>& tree)
+{
+    tree.read(is);
+    return is;
+}
 
 #endif

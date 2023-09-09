@@ -43,39 +43,34 @@ public:
 
     NodeBinaryTree(){}
 
-    void      setChild(const Node *pChild, size_t pos)  {   m_pChild[pos] = pChild;  }
+    void      setChild(Node *pChild, size_t pos)  {   m_pChild[pos] = pChild;  }
     Node    * getChild(size_t branch){ return m_pChild[branch];  }
     Node    *&getChildRef(size_t branch){ return m_pChild[branch];  }
     Node    * getParent() { return m_pParent;   }
+    void      setParent(Node* parent) { m_pParent = parent;   }
+    Node    *&getParentRef(){ return m_pParent;  }
 
     size_t getLevel(){return m_level;}
+    void setLevel(size_t level){m_level = level;}
     bool getVisited(){return m_visited;}
     void setVisited(bool visited){m_visited = visited;}
 
     size_t getDepth(){return m_depth;}
     void   setDepth(size_t depth){m_depth = depth;}
-    
-    size_t getDepth(size_t branch){
-        Node* child = getChild(branch);
-        if(!child){ return 0; }
-        return child->getDepth();
-    }
-    virtual void   updateDepth();
-    virtual size_t getBalance();
 };
 
-template <typename _T, typename _V, class _Node = NodeBinaryTree<_T, _V>,
-          typename _CompareFn = std::less< _Node >>
+template <typename _T, typename _V,
+          typename _CompareFn = std::less< NodeBinaryTree<_T, _V> >>
 struct BinaryTreeTrait
 {
     using  value_type       = _T;
     using  LinkedValueType  = _V;
-    using  Node             = _Node;
+    using  Node             = NodeBinaryTree<_T, _V>;
     using  CompareFn        = _CompareFn;
 };
 
-using BinaryTreeTraitIntIntAsc      = BinaryTreeTrait<int  , int   , NodeBinaryTree<int, int >,      std::less<NodeBinaryTree<int, int> >>;
-using BinaryTreeTraitFloatStringAsc = BinaryTreeTrait<float, string, NodeBinaryTree<float, string >, std::greater<NodeBinaryTree<float, string> >>;
+using BinaryTreeTraitIntIntAsc      = BinaryTreeTrait<int  , int   , std::less<NodeBinaryTree<int, int> >>;
+using BinaryTreeTraitFloatStringAsc = BinaryTreeTrait<float, string, std::greater<NodeBinaryTree<float, string> >>;
 
 
 template <typename Traits>
@@ -125,7 +120,6 @@ protected:
         size_t branch = Compfn(key, rpOrigin->getDataRef() );
         return internal_insert(key, value, rpOrigin, rpOrigin->getChildRef(branch), level+1);
     }
-    virtual void balance(){}
     Node* furthestBranch(Node *pNode, size_t child){
         assert(pNode != nullptr);
         while(pNode->getChild(child) != nullptr){
@@ -135,6 +129,7 @@ protected:
     }
     Node* furthestLeft(Node *pNode) { return furthestBranch(pNode, 0);}
     Node* furthestRight(Node *pNode){ return furthestBranch(pNode, 1);}
+
 public:
     template <typename F, typename... Args>
     void inorder(F func, Args&&... args){
@@ -151,10 +146,43 @@ public:
         foreach(postbegin(), postend(), func, args...);
     }
 
-    template <typename F, typename... Args>
-    void print(F func, Args&&... args){
-        foreach(printbegin(), printend(), func, args...);
+    // template <typename F, typename... Args>
+    // void print(F func, Args&&... args){
+    //     foreach(printbegin(), printend(), func, args...);
+    // }
+
+    virtual void print        (ostream &os){
+        foreach(printbegin(), printend(), [](Node &node, ostream& os){
+            string whitespace = "";
+            for(size_t i = 0; i < 4 * node.getLevel(); i++ )
+                whitespace += " ";
+            string parent = node.getParent() ? to_string(node.getParent()->getData()) : "Root";
+            string keyValue = to_string(node.getData()) + " : " + to_string(node.getValue()) + " (" + parent + ")";
+            os << whitespace << keyValue << endl;
+        }, os);
+    }
+
+    virtual void read(istream &is){
+        value_type key;
+        LinkedValueType value;
+        is>>key;
+        is>>value;
+        insert(key, value);
     }
 };
+
+template<typename Traits>
+ostream& operator<<(ostream& os, BinaryTree<Traits>& tree)
+{
+    tree.print(os);
+    return os;
+}
+
+template<typename Traits>
+istream& operator>>(istream& is, BinaryTree<Traits>& tree)
+{
+    tree.read(is);
+    return is;
+}
 
 #endif
