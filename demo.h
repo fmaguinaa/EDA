@@ -14,7 +14,12 @@ void DemoHeap();
 void DemoBinaryTree();
 void DemoHash();
 
+template <typename Container>
+void demoLinkedList(Container &);
+void demoLinkedListSorted();
 
-
+template <typename Container>
+void demoDoubleLinkedList(Container &);
+void demoDoubleLinkedListSorted();
 
 #endif // __DEMO_H__
