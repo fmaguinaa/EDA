@@ -136,7 +136,6 @@ public:
     Node *pPrevTail = m_pTail;
     Node *pNew = *insert_forward(key, value);
     if (pNew != m_pTail)
-      // ::CreateBridge(((Node *)pNew->getpNext())->getpPrevRef(), pNew, &Node::m_pPrev);
       ::CreateBridge(pNew->getpNext()->getpPrevRef(), pNew, &Node::m_pPrev);
     else
       pNew->setpPrev(pPrevTail);
