@@ -2,10 +2,31 @@
 #include <fstream>  // ofstream, ifstream
 #include <cmath>
 #include <memory>
+#include <string>
 #include "demo.h"
 #include "array.h"
-#include "recorrer.h"
+#include "matrix.h"
+#include "foreach.h"
+#include "binarytree.h"
+#include "avl.h"
+
 using namespace std;
+
+template <typename T, int N>
+void increment(T &x)
+{  x+= N; }
+
+template <typename T>
+void print(T &x)
+{  cout << x << "  "; }
+
+// Object function
+template <typename T>
+class ClassX
+{          int m_inc = 0;
+    public:  ClassX(int n) : m_inc(n){}
+    void operator()(T &n){  n += m_inc;     }
+};
 
 void Fx1(int n ) {    n++;    }
 void Fx2(int &n) {    n++;    }
@@ -70,45 +91,49 @@ void DemoSmartPointers(){
     cout << *pV3 ;
 }
 
-TX **CreateMatrix(size_t rows, size_t cols){
-    TX **res = new TX *[rows];
-    for(auto i = 0 ; i < rows ; i++)
-        res[i] = new TX[cols];
-        // *(res+i) = new TX[cols];
-        // *(i+res) = new TX[cols];
-        // i[res] = new TX[cols];
-    return res;
-}
-
-void FillMatrix(TX **pM, size_t rows, size_t cols, TX val){
-    for(auto y = 0 ; y < rows ; y++)
-       for(auto x = 0 ; x < cols ; x++)
-           pM[y][x] = val;
-}
-
-void PrintMatrix(TX **pM, size_t rows, size_t cols){
-    for(auto y = 0 ; y < rows ; y++){
-        for(auto x = 0 ; x < cols ; x++)
-           cout << pM[y][x] << " ";
-        cout << endl;
-    }
-}
-void DestroyMatrix(TX **&pM, size_t rows, size_t cols){
-    for(auto y = 0 ; y < rows ; y++)
-        delete [] pM[y];
-    delete [] pM;
-    pM = nullptr;
-}
-
 void DemoDynamicMatrixes(){
 
-    TX **pM = nullptr;
-    size_t rows = 3, cols = 4;
-    pM = CreateMatrix(rows, cols);
-    FillMatrix(pM, rows, cols, 5);
-    PrintMatrix(pM, rows, cols);
-    DestroyMatrix(pM, rows, cols);
-    cout << pM << endl;
+    cout << "----------------mat1--------------------" << endl;
+    CMatrix<MatrixTraitFloat> mat1(3, 4);
+    mat1.fill(1);
+    //cout << "k : " << mat1.m_rows<<endl;
+    cout << mat1;
+
+    cout << "----------------mat1--------------------" << endl;
+    CMatrix<MatrixTraitFloat> mat2(4, 5);
+    mat2.fill(2.5);
+    cout << mat2;
+
+    cout << "----------------mat1*mat2--------------------" << endl;
+    // TODO #1: overload operator*(CMatrix<Traits> &other)
+    CMatrix<MatrixTraitFloat> mat3 = mat1 * mat2;
+    cout << mat3;
+
+    cout <<endl;
+    cout << "----------------Iterator matrix--------------------" << endl;
+    // TODO #2: Create Iterator for CMatrix
+    cout <<endl<< "----mat1----" << endl;
+    foreach(mat1, ::print<TX>);
+    cout << endl;
+
+    cout <<endl<< "----mat1 sumando un contador----" << endl;
+    TX x = 1;
+    // // Lambda function
+    // foreach(mat1, [x](TX &n){ n += x; x++; });
+    // foreach(mat1, ::print<TX>); cout << endl;
+    // ClassX<TX> ope(5);
+    // foreach(mat1, ope);
+    // foreach(mat1, ::print<TX>); cout << endl;
+    // foreach(mat1, ClassX<TX>(8) );
+    // foreach(mat1, ::print<TX>); cout << endl;
+
+     // // TODO #3: prepare Matrix to be used as a matrix from outside
+    // // overload operator[](size_t row)
+    cout << "----------------Operator [] and ()-------------------" << endl;
+    mat1[2][3] = 8.2;
+    mat1(2, 2) = 7.5; // Operator () is returning a value_type &
+    cout << mat1;
+    cout << endl;
 }
 
 void DemoPreandPostIncrement(){
@@ -164,7 +189,7 @@ void DemoArray(){
     of << v2 << endl; 
     cout << "DemoArray finished !" << endl;
 
-    using TraitStringString = ArrayTrait<string, string  , std::less<NodeArray<string, string> &>>;
+    using TraitStringString = XTrait<string, string  , std::less<KeyNode<string, string> &>>;
     CArray< TraitStringString > vx("Ernesto Cuadros");
     vx.insert("Ernesto", "Cuadros");
     vx.insert("Luis"   , "Tejada");
@@ -173,22 +198,6 @@ void DemoArray(){
     vx.insert("Franz"  , "Maguiña");
     vx.print(cout);
 }
-
-template <typename T, int N>
-void increment(T &x)
-{  x+= N; }
-
-template <typename T>
-void print(T &x)
-{  cout << x << "  "; }
-
-// Object function
-template <typename T>
-class ClassX
-{          int m_inc = 0;
-    public:  ClassX(int n) : m_inc(n){}
-    void operator()(T &n){  n += m_inc;     }
-};
 
 void DemoIterators(){
     CArray< TraitArrayIntInt > v1("Jorge");
@@ -204,26 +213,26 @@ void DemoIterators(){
     // array_forward_iterator<CArray< TraitArrayIntInt >> iter = v1.begin();
     //CArray< TraitArrayIntInt >::iterator iter = v1.begin();
     auto iter = v1.begin();
-    recorrer(iter, v1.end(), ::increment<TX, 7>);
+    foreach(iter, v1.end(), ::increment<TX, 7>);
     cout << v1 << endl;
-    recorrer(v1, ::increment<TX, 4>);
+    foreach(v1, ::increment<TX, 4>);
     cout << v1 << endl;
 
-    recorrer(v1, ::print<TX>);
+    foreach(v1, ::print<TX>);
     cout << endl;
     // Lambda function
     int x = 3;
-    recorrer(v1, [x](TX &n){ n *= 2*x; });
-    recorrer(v1, ::print<TX>); cout << endl;
+    foreach(v1, [x](TX &n){ n *= 2*x; });
+    foreach(v1, ::print<TX>); cout << endl;
     ClassX<TX> ope(5);
-    recorrer(v1, ope);
-    recorrer(v1, ::print<TX>); cout << endl;
-    recorrer(v1, ClassX<TX>(8) );
-    recorrer(v1, ::print<TX>); cout << endl;
+    foreach(v1, ope);
+    foreach(v1, ::print<TX>); cout << endl;
+    foreach(v1, ClassX<TX>(8) );
+    foreach(v1, ::print<TX>); cout << endl;
 }
 
 void DemoReverseIterators(){
-    cout << "DEMO REVERSE ITERATORS FOR ARRAY AS A CONTEINER : " << endl;
+    cout << "DemoReverseIterators: " << endl;
     CArray< TraitArrayIntInt > v1("Edson Cáceres");
     v1.insert(30, 40);
     v1.insert(18, 45);
@@ -235,12 +244,133 @@ void DemoReverseIterators(){
     cout << "Printing asc : " << endl;
     cout << v1 << endl;
     cout << "Printing desc : " << endl;
-    recorrer(v1.rbegin(), v1.rend(), ::print<TX>);
+    foreach(v1.rbegin(), v1.rend(), ::print<TX>);
 }
 
-void DemoBinaryTree()
+void DemoHeap()
 {
-    cout << "Hello from DemoBinaryTree()" <<endl;
+    cout << "Hello from DemoHeap()" <<endl;
+}
+
+string operator*(string text, size_t n){
+    string res = "";
+    for (size_t i = 0; i < n; i++){
+        res += text;
+    }
+    return res;
+}
+
+template <typename Node>
+void printAsLine(Node &node, ostream &os){
+    os << " => (" << node.getData() << " : " << node.getValue() << ")";
+}
+
+void DemoBinaryTree(){
+    BinaryTree< BinaryTreeTraitIntIntAsc > binaryTree;
+
+    using value_type      = typename BinaryTreeTraitIntIntAsc::value_type;
+    using LinkedValueType = typename BinaryTreeTraitIntIntAsc::LinkedValueType;
+    using Node            = typename BinaryTreeTraitIntIntAsc::Node;
+
+    vector<Node> nodes= {
+        Node(50, 1),
+        Node(30, 2),
+        Node(20, 3),
+        Node(80, 4),
+        Node(60, 5),
+        Node(70, 6),
+        Node(40, 7),
+        Node(90, 8)
+    };
+    for(auto node : nodes){
+        cout << "Inserting values => " << node.getDataRef() << " : "  << node.getValueRef() << endl;
+        binaryTree.insert(node.getDataRef(), node.getValueRef());
+    }
+    cout << "Binary Tree IntIntAsc" << endl;
+
+    cout << "Key : Linked Value (Parent)" << endl;
+    cout << binaryTree;
+    cout << endl << endl;
+
+    cout << "In Order" << endl;
+    binaryTree.inorder(printAsLine<Node>, cout);
+    cout << endl << endl;
+
+    cout << "Pre Order" << endl;
+    binaryTree.preorder(printAsLine<Node>, cout);
+    cout << endl << endl;
+
+    cout << "Post Order" << endl;
+    binaryTree.postorder(printAsLine<Node>, cout);
+    cout << endl << endl;
+
+    cout << "Iterating and operating over linked value" << endl;
+    LinkedValueType value = 1;
+    binaryTree.inorder(
+        [](Node &node, LinkedValueType &value) {
+            node.getValueRef() = node.getValue() + value;
+        }, value);
+
+    cout << "Printing after iteration" << endl;
+    cout << binaryTree;
+    cout << endl << endl;
+}
+
+void DemoAVLTree(){
+    CAVL< BinaryTreeTraitIntIntAsc > avlTree;
+
+    using value_type      = typename BinaryTreeTraitIntIntAsc::value_type;
+    using LinkedValueType = typename BinaryTreeTraitIntIntAsc::LinkedValueType;
+    using Node            = typename BinaryTreeTraitIntIntAsc::Node;
+
+    vector<Node> nodes= {
+        Node(30, 2),
+        Node(20, 3),
+        Node(80, 4),
+        Node(50, 1),
+        Node(60, 5),
+        Node(70, 6),
+        Node(40, 7),
+        Node(90, 8)
+    };
+    for(auto node : nodes){
+        cout << "Inserting values => " << node.getDataRef() << " : "  << node.getValueRef() << endl;
+        avlTree.insert(node.getDataRef(), node.getValueRef());
+    }
+    cout << "AVL Tree IntIntAsc" << endl;
+
+    cout << "Key : Linked Value (Parent) [Depth]" << endl;
+    cout << avlTree;
+    cout << endl << endl;
+
+    cout << "In Order" << endl;
+    avlTree.inorder(printAsLine<Node>, cout);
+    cout << endl << endl;
+
+    cout << "Pre Order" << endl;
+    avlTree.preorder(printAsLine<Node>, cout);
+    cout << endl << endl;
+
+    cout << "Post Order" << endl;
+    avlTree.postorder(printAsLine<Node>, cout);
+    cout << endl << endl;
+
+    cout << "Iterating and operating over linked value" << endl;
+    LinkedValueType value = 1;
+    avlTree.inorder(
+        [](Node &node, LinkedValueType &value) {
+            node.getValueRef() = node.getValue() + value;
+        }, value);
+
+    cout << "Printing after iteration" << endl;
+    cout << avlTree;
+    cout << endl << endl;
+
+    cout << "Inserting with operator >> " << endl;
+    cin >> avlTree;
+    cout << "Printing after insertion >>" << endl;
+    cout << avlTree;
+    cout << endl << endl;
 }
 
 void DemoHash()

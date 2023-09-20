@@ -11,16 +11,18 @@ using namespace std;
 int main()
 {
     // DemoParameters();
-    //DemoArray();
-    //DemoIterators();
-    DemoReverseIterators();
     // DemoArray();
-    //DemoIterators();
+    // DemoIterators();
+    // DemoReverseIterators();
+    // DemoDynamicMatrixes();
+
+    // DemoHeap();
     // DemoBinaryTree();
+    DemoAVLTree();
     // DemoHash();
 
     // DemoPreandPostIncrement();
     // DemoSmartPointers();
-    DemoDynamicMatrixes();
+    
     return 0;
 }
