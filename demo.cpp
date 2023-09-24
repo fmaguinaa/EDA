@@ -185,7 +185,7 @@ void DemoArray(){
     of << v2 << endl; 
     cout << "DemoArray finished !" << endl;
 
-    using TraitStringString = ArrayTrait<string, string  , std::less<NodeArray<string, string> &>>;
+    using TraitStringString = XTrait<string, string  , std::less<XTrait<string, string> &>>;
     CArray< TraitStringString > vx("Ernesto Cuadros");
     vx.insert("Ernesto", "Cuadros");
     vx.insert("Luis"   , "Tejada");
@@ -357,20 +357,50 @@ void DemoHash()
 //     DemoBinaryTree(myDescBinaryTree);
 // }
 
-// #include "btree.h"
-// void DemoTree()
-// {
-//     BTree < BtreeTrait<char,long> > bt;
-//     const char * keys = "DYZakHIUwxVJ203ejOP9Qc8AdtuEop1XvTRghSNbW567BfiCqrs4FGMyzKLlmn";
-//     for(size_t i = 0; keys[i]; i++)
-//         {
-//             //cout<<"Inserting "<<keys[i]<<endl;
-//             //result = bt.Insert(keys4[i], i*i);
-//             bt.Insert(keys[i], i*i);
-//             //bt.Print(cout);
-//         }
-//     bt.Print(cout);
-//     exit(0);
+#include "btree.h"
+void DemoBTree()
+{
+    cout << "DemoBTree" << endl;
+    cout << "BTree char long" << endl;
+    BTree<BTreeTrait<char, long>> bt;
+    const char * keys = "DYZakHIUwxVJ203ejOP9Qc8AdtuEop1XvTRghSNbW567BfiCqrs4FGMyzKLlmn";
+    for(size_t i = 0; keys[i]; i++)
+        {
+            //cout<<"Inserting "<<keys[i]<<endl;
+            //result = bt.Insert(keys4[i], i*i);
+            bt.Insert(keys[i], i*i);
+            //bt.Print(cout);
+        }
+    cout << bt;
+    cout << endl << endl;
+    cout << "BTree float int" << endl;
+    BTree<BTreeTrait<float, int>> bt2;
+    ifstream input("test.txt");
+    input >> bt2;
+    cout << bt2;
+    cout << endl;
+}
 
-// }
-
+#include "btreepage.h"
+void DemoBTreePage()
+{
+    cout << "DemoBTreePage" << endl;
+    cout << "BTree Page char long" << endl;
+    BTree<BTreeTrait<char, long>> btree_page;
+    const char * keys = "DYZakHI";
+    for(size_t i = 0; keys[i]; i++)
+        {
+            //cout<<"Inserting "<<keys[i]<<endl;
+            //result = bt.Insert(keys4[i], i*i);
+            btree_page.Insert(keys[i], i*i);
+            //bt.Print(cout);
+        }
+    cout << btree_page;
+    cout << endl << endl;
+    cout << "BTree Page float int" << endl;
+    BTree<BTreeTrait<float, int>> btree_page2;
+    ifstream input("test.txt");
+    input >> btree_page2;
+    cout << btree_page2;
+    cout << endl;
+}
