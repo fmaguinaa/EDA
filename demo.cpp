@@ -423,9 +423,15 @@ void DemoHashMap(){
     hashmap.insert(11, "Guiomar");
     hashmap.insert(12, "Jorge");
     hashmap.insert(2, "Eduardo");
+    hashmap.insert(32, "Franz");
     hashmap.insert(10, "Lucero");
     hashmap.insert(20, "Edson");
     hashmap.insert(23, "Ernesto");
+
+    cout << hashmap;
+
+    cout << "Removing node with value 32" << endl;
+    hashmap.remove(32);
 
     cout << hashmap;
 
