@@ -2,6 +2,7 @@
 #define __BTREE_H__
 
 #include <iostream>
+#include <mutex>
 #include "btreepage.h"
 #include "btree_iterator.h"
 
@@ -27,7 +28,8 @@ class BTree // this is the full version of the BTree
   typedef typename Trait::CompareFn         CompareFn;
        
   // typedef CBTreePage <Trait> BTNode;// useful shorthand
-
+private:
+       mutable mutex m_mutex;
 public:
        //typedef ObjectInfo iterator;
       //  typedef typename Node::ObjectInfo      ObjectInfo;
@@ -49,7 +51,9 @@ public:
        bool            Insert (const value_type key, const LinkedValueType value);
        bool            Remove (const value_type key, const LinkedValueType value);
        LinkedValueType       Search (const value_type key)
-       {      LinkedValueType value = -1;
+       {
+              lock_guard<mutex> lock(m_mutex);
+              LinkedValueType value = -1;
               m_Root.Search(key, value, m_compareFn);
               return value;
        }
@@ -79,6 +83,7 @@ protected:
 
 template <typename Trait>
 bool BTree<Trait>::Insert(const value_type key, const LinkedValueType value){
+       lock_guard<mutex> lock(m_mutex);
        bt_ErrorCode error = m_Root.Insert(key, value, m_compareFn);
        if( error == bt_duplicate )
                return false;
@@ -94,6 +99,7 @@ bool BTree<Trait>::Insert(const value_type key, const LinkedValueType value){
 template <typename Trait>
 bool BTree<Trait>::Remove (const value_type key, const LinkedValueType value)
 {
+       lock_guard<mutex> lock(m_mutex);
        bt_ErrorCode error = m_Root.Remove(key, value, m_compareFn);
        if( error == bt_duplicate || error == bt_nofound )
                return false;
