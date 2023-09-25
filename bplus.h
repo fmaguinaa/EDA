@@ -15,13 +15,13 @@ public:
   typedef T Type;
   typedef V LinkedValueType;
   using Parent = class KeyNode<T, V>;
-  friend class CBPlus;
+  // friend class CBPlus;
 private:
   typedef CBPlusNode<T, V> Node;
-private:
+public:
   bool m_leaf = true;
   Node** m_ptr;
-  value_type *key, size;
+  int *key, size;
 public:
   CBPlusNode(value_type key, LinkedValueType value) : Parent(key, value) {
     m_ptr = new Node *[MAX + 1];
@@ -76,17 +76,12 @@ private:
   Node *findParent(Node *, Node *);
 
 public:
-  CBPlus();
+  CBPlus() {m_root = nullptr;}
   void search(value_type);
   void insert(value_type, LinkedValueType);
   void display(Node *);
   Node *getRoot();
 };
-
-template <typename Traits>
-CBPlus<Traits>::CBPlus() {
-  m_root = nullptr;
-}
 
 // Search operation
 template <typename Traits>
@@ -121,7 +116,7 @@ void CBPlus<Traits>::search(value_type x) {
 template <typename Traits>
 void CBPlus<Traits>::insert(value_type key, LinkedValueType value) {
   if (m_root == nullptr) {
-    m_root = new Node();
+    m_root = new Node(key, value);
     m_root->key[0] = key;
     m_root->m_leaf = true;
     m_root->size = 1;
@@ -148,12 +143,12 @@ void CBPlus<Traits>::insert(value_type key, LinkedValueType value) {
       for (int j = cursor->size; j > i; j--) {
         cursor->key[j] = cursor->key[j - 1];
       }
-      cursor->key[i] = x;
+      cursor->key[i] = key;
       cursor->size++;
       cursor->m_ptr[cursor->size] = cursor->m_ptr[cursor->size - 1];
       cursor->m_ptr[cursor->size - 1] = nullptr;
     } else {
-      Node *newLeaf = new Node;
+      Node *newLeaf = new Node(key, value);
       int virtualNode[MAX + 1];
       for (int i = 0; i < MAX; i++) {
         virtualNode[i] = cursor->key[i];
@@ -164,7 +159,7 @@ void CBPlus<Traits>::insert(value_type key, LinkedValueType value) {
       for (int j = MAX + 1; j > i; j--) {
         virtualNode[j] = virtualNode[j - 1];
       }
-      virtualNode[i] = x;
+      virtualNode[i] = key;
       newLeaf->m_leaf = true;
       cursor->size = (MAX + 1) / 2;
       newLeaf->size = MAX + 1 - (MAX + 1) / 2;
@@ -178,7 +173,7 @@ void CBPlus<Traits>::insert(value_type key, LinkedValueType value) {
         newLeaf->key[i] = virtualNode[j];
       }
       if (cursor == m_root) {
-        Node *newRoot = new Node;
+        Node *newRoot = new Node(key, value);
         newRoot->key[0] = newLeaf->key[0];
         newRoot->m_ptr[0] = cursor;
         newRoot->m_ptr[1] = newLeaf;
@@ -186,7 +181,7 @@ void CBPlus<Traits>::insert(value_type key, LinkedValueType value) {
         newRoot->size = 1;
         m_root = newRoot;
       } else {
-        insertInternal(newLeaf->key[0], parent, newLeaf);
+        insertInternal(newLeaf->key[0], value, parent, newLeaf);
       }
     }
   }
@@ -209,7 +204,7 @@ void CBPlus<Traits>::insertInternal(value_type x, LinkedValueType value, Node *c
     cursor->size++;
     cursor->m_ptr[i + 1] = child;
   } else {
-    Node *newInternal = new Node;
+    Node *newInternal = new Node(x, value);
     int virtualKey[MAX + 1];
     Node *virtualPtr[MAX + 2];
     for (int i = 0; i < MAX; i++) {
@@ -239,7 +234,7 @@ void CBPlus<Traits>::insertInternal(value_type x, LinkedValueType value, Node *c
       newInternal->m_ptr[i] = virtualPtr[j];
     }
     if (cursor == m_root) {
-      Node *newRoot = new Node;
+      Node *newRoot = new Node(x, value);
       newRoot->key[0] = cursor->key[cursor->size];
       newRoot->m_ptr[0] = cursor;
       newRoot->m_ptr[1] = newInternal;
@@ -247,7 +242,7 @@ void CBPlus<Traits>::insertInternal(value_type x, LinkedValueType value, Node *c
       newRoot->size = 1;
       m_root = newRoot;
     } else {
-      insertInternal(cursor->key[cursor->size], findParent(m_root, cursor), newInternal);
+      insertInternal(cursor->key[cursor->size], value, findParent(m_root, cursor), newInternal);
     }
   }
 }
