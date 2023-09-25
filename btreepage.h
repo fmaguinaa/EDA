@@ -5,6 +5,7 @@
 #include <vector>
 #include <assert.h>
 #include <functional>
+#include <mutex>
 #include "keynode.h"
 
 // TODO: #1 Crear una function para agregarla al demo.cpp ( no trivial )
@@ -85,6 +86,7 @@ public:
   using Parent = class KeyNode<T, V>;
 private:
   typedef CBTreePage<T, V> BTPage;
+  mutable mutex m_mutex;
 
 public:
   typedef tagObjectInfo<value_type, LinkedValueType> ObjectInfo;
@@ -191,6 +193,7 @@ template <typename value_type, typename LinkedValueType>
 template <typename CompareFn>
 bt_ErrorCode CBTreePage<value_type, LinkedValueType>::Insert(const value_type& key, const LinkedValueType value, CompareFn compareFn)
 {
+       lock_guard<mutex> lock(m_mutex);
        size_t pos = binary_search(m_Keys, 0, m_KeyCount, key, compareFn);
        bt_ErrorCode error = bt_ok;
 
@@ -490,6 +493,7 @@ template <typename value_type, typename LinkedValueType>
 template <typename CompareFn>
 bool CBTreePage<value_type, LinkedValueType>::Search(const value_type &key, LinkedValueType &value, CompareFn compareFn)
 {
+       lock_guard<mutex> lock(m_mutex);
        size_t pos = binary_search(m_Keys, 0, m_KeyCount, key, compareFn);
        if( pos >= m_KeyCount )
        {    if( m_SubPages[pos] )
@@ -561,6 +565,7 @@ template <typename value_type, typename LinkedValueType>
 template <typename CompareFn>
 bt_ErrorCode CBTreePage<value_type, LinkedValueType>::Remove(const value_type &key, const LinkedValueType value, CompareFn compareFn)
 {
+       lock_guard<mutex> lock(m_mutex);
        bt_ErrorCode error = bt_ok;
        size_t pos = binary_search(m_Keys, 0, m_KeyCount, key, compareFn);
        if( pos < NumberOfKeys() && key == m_Keys[pos].key /*&& m_Keys[pos].value == value*/) // We found it !
@@ -737,6 +742,7 @@ void CBTreePage<value_type, LinkedValueType>::Print(ostream & os)
 template <typename value_type, typename LinkedValueType>
 void CBTreePage<value_type, LinkedValueType>::Read (istream &is)
 {
+        lock_guard<mutex> lock(m_mutex);
         size_t size; is >> size;
         string separator;
         value_type key;
