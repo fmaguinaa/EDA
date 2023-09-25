@@ -399,6 +399,42 @@ void DemoMap(){
     // C++98 alternative modified to use auto
     for (auto it = m.rbegin(); it != m.rend(); it++)
         cout << it->first << " = " << it->second << "; " << endl;
- 
+}
 
+#include "hash.h"
+struct MyKeyHash {
+    unsigned long operator()(const int& k) const
+    {
+        return k % 10;
+    }
+};
+
+struct MyKeyHashFloat {
+    unsigned long operator()(const float& k) const
+    {
+        return int(k*100) % 10;
+    }
+};
+
+void DemoHashMap(){
+    HashMap<HashMapTraits<int, string, MyKeyHash>> hashmap;
+    cout << "HashMap int string" << endl;
+    hashmap.insert(1, "Francisco");
+    hashmap.insert(11, "Guiomar");
+    hashmap.insert(12, "Jorge");
+    hashmap.insert(2, "Eduardo");
+    hashmap.insert(10, "Lucero");
+    hashmap.insert(20, "Edson");
+    hashmap.insert(23, "Ernesto");
+
+    cout << hashmap;
+
+    HashMap<HashMapTraits<float, float, MyKeyHashFloat>> hashmap2;
+    cout << "HashMap float float" << endl << endl;
+    cout << "Insert hash map" << endl;
+    ifstream input("test.txt");
+    input >> hashmap2;
+    cout << endl;
+    cout << "Printing 2nd hash map" << endl;
+    cout << hashmap2;
 }
