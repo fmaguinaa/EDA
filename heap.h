@@ -11,8 +11,8 @@
 
 using namespace std;
 
-using XTraitFloatStringDesc = XTraitTrait<float, string, std::less<KeyNode<int, int > &>>;>;
-using XTraitIntIntAsc       = XTraitTrait<int  , int   , std::greater<KeyNode<int, int > &>>;
+using XTraitFloatStringDesc = XTrait<float, string, std::less<KeyNode<int, int > &>>;
+using XTraitIntIntAsc       = XTrait<int  , int   , std::greater<KeyNode<int, int > &>>;
 
 // Created by: @ecuadros
 template <typename Traits>
