@@ -405,13 +405,19 @@ void DemoMap(){
 
 #include "bplus.h"
 void DemoBPlus(){
-  CBPlus<CBPlusTraitAsc<int, int>> node;
-  node.insert(5, 23);
-  node.insert(30, 34);
-  node.insert(20, 45);
-  node.insert(24, 23);
-  node.insert(22, 10);
-  node.display(node.getRoot());
+    CBPlus<CBPlusTraitAsc<int, int>> cplus;
+    cplus.insert(5, 23);
+    cplus.insert(30, 34);
+    cplus.insert(20, 45);
+    cplus.insert(24, 23);
+    cplus.insert(22, 10);
+    cout << cplus;
+    cplus.search(15);
 
-  node.search(15);
+    cout << "BPlus float int" << endl;
+    CBPlus<CBPlusTraitDesc<float, int>> cplus2;
+    ifstream input("test.txt");
+    input >> cplus2;
+    cout << cplus2;
+    cout << endl;
 }
