@@ -357,6 +357,11 @@ void DemoHash()
 //     DemoBinaryTree(myDescBinaryTree);
 // }
 
+template <typename Node>
+void printIteration(Node &node, ostream &os){
+    os << " => (" << node.getData() << " : " << node.getValue() << ")";
+}
+
 #include "btree.h"
 void DemoBTree()
 {
@@ -372,35 +377,17 @@ void DemoBTree()
             //bt.Print(cout);
         }
     cout << bt;
+    cout << endl;
+    cout << "BTree Forward Iteration Print" << endl;
+    foreach(bt, &::printIteration<CBTreePage<char, long>>, cout);
+    cout << endl;
+    cout << "BTree Backward Iteration Print" << endl;
+    foreach_reverse(bt, &::printIteration<CBTreePage<char, long>>, cout);
     cout << endl << endl;
     cout << "BTree float int" << endl;
     BTree<BTreeTrait<float, int>> bt2;
     ifstream input("test.txt");
     input >> bt2;
     cout << bt2;
-    cout << endl;
-}
-
-#include "btreepage.h"
-void DemoBTreePage()
-{
-    cout << "DemoBTreePage" << endl;
-    cout << "BTree Page char long" << endl;
-    BTree<BTreeTrait<char, long>> btree_page;
-    const char * keys = "DYZakHI";
-    for(size_t i = 0; keys[i]; i++)
-        {
-            //cout<<"Inserting "<<keys[i]<<endl;
-            //result = bt.Insert(keys4[i], i*i);
-            btree_page.Insert(keys[i], i*i);
-            //bt.Print(cout);
-        }
-    cout << btree_page;
-    cout << endl << endl;
-    cout << "BTree Page float int" << endl;
-    BTree<BTreeTrait<float, int>> btree_page2;
-    ifstream input("test.txt");
-    input >> btree_page2;
-    cout << btree_page2;
     cout << endl;
 }

@@ -2,95 +2,97 @@
 #define ___BTREE_ITERATOR_H__
 
 template <typename Container>
-class forward_iterator
+class btree_forward_iterator
 {
 public:
   typedef typename Container::Node Node;
   typedef typename Node::Type Type;
-  typedef forward_iterator<Container> myself;
+  typedef btree_forward_iterator<Container> myself;
 
 private:
   Container *m_pContainer;
-  Node *m_pNode;
+  size_t m_index;
 
 public:
-  forward_iterator(Container *pContainer, Node *pNode) : m_pContainer(pContainer), m_pNode(pNode) {}
-  forward_iterator(myself &other)
+  btree_forward_iterator(Container *pContainer, size_t index) : m_pContainer(pContainer), m_index(index) {}
+  btree_forward_iterator(myself &other)
   {
     m_pContainer = other.m_pContainer;
-    m_pNode = other.m_pNode;
+    m_index = other.m_index;
   }
-  forward_iterator(myself &&other)
+  btree_forward_iterator(myself &&other)
   {
     m_pContainer = std::move(other.m_pContainer);
-    m_pNode = std::move(other.m_pNode);
+    m_index = std::move(other.m_index);
   }
-  forward_iterator operator=(forward_iterator &iter)
+  btree_forward_iterator operator=(btree_forward_iterator &iter)
   {
     m_pContainer = std::move(iter.m_pContainer);
-    m_pNode = std::move(iter.m_pNode);
+    m_index = std::move(iter.m_index);
   }
-  bool operator==(forward_iterator iter)
+  bool operator==(btree_forward_iterator iter)
   {
-    return m_pNode == iter.m_pNode;
+    return m_index == iter.m_index;
   }
-  bool operator!=(forward_iterator iter)
+  bool operator!=(btree_forward_iterator iter)
   {
     return !(*this == iter);
   }
   Node &operator*()
   {
-    return *m_pNode;
+    return *(m_pContainer->getNode(m_index));
   }
-  forward_iterator operator++()
+  btree_forward_iterator operator++()
   {
+    m_index++;
     return *this;
   }
 };
 
 template <typename Container>
-class backward_iterator
+class btree_backward_iterator
 {
 public:
   typedef typename Container::Node Node;
   typedef typename Node::Type Type;
-  typedef backward_iterator<Container> myself;
+  typedef btree_backward_iterator<Container> myself;
 
 private:
   Container *m_pContainer;
-  Node *m_pNode;
+  size_t m_index;
 
 public:
-  backward_iterator(Container *pContainer, Node *pNode) : m_pContainer(pContainer), m_pNode(pNode) {}
-  backward_iterator(myself &other)
+  btree_backward_iterator(Container *pContainer, size_t index) : m_pContainer(pContainer), m_index(index) {}
+  btree_backward_iterator(myself &other)
   {
     m_pContainer = other.m_pContainer;
-    m_pNode = other.m_pNode;
+    m_index = other.m_index;
   }
-  backward_iterator(myself &&other)
+  btree_backward_iterator(myself &&other)
   {
     m_pContainer = std::move(other.m_pContainer);
-    m_pNode = std::move(other.m_pNode);
+    m_index = std::move(other.m_index);
   }
-  backward_iterator operator=(backward_iterator &iter)
+  btree_backward_iterator operator=(btree_backward_iterator &iter)
   {
     m_pContainer = std::move(iter.m_pContainer);
-    m_pNode = std::move(iter.m_pNode);
+    m_index = std::move(iter.m_index);
   }
-  bool operator==(backward_iterator iter)
+  bool operator==(btree_backward_iterator iter)
   {
-    return m_pNode == iter.m_pNode;
+    return m_index == iter.m_index;
   }
-  bool operator!=(backward_iterator iter)
+  bool operator!=(btree_backward_iterator iter)
   {
     return !(*this == iter);
   }
   Node &operator*()
   {
-    return *m_pNode;
+    return *(m_pContainer->getNode(m_index));
   }
-  backward_iterator operator++()
+  btree_backward_iterator operator++()
   {
+    m_index--;
     return *this;
   }
 };

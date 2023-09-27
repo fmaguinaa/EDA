@@ -15,7 +15,6 @@ void DemoBinaryTree();
 void DemoHash();
 
 void DemoBTree();
-void DemoBTreePage();
 
 
 #endif // __DEMO_H__

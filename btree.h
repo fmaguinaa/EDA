@@ -22,12 +22,15 @@ struct BTreeTrait
 template <typename Trait>
 class BTree // this is the full version of the BTree
 {
+public:
   typedef typename Trait::value_type        value_type;
   typedef typename Trait::LinkedValueType   LinkedValueType;
+  typedef typename Trait::Node              Node;
   typedef typename Trait::Node              BTNode;
   typedef typename Trait::CompareFn         CompareFn;
-       
-  // typedef CBTreePage <Trait> BTNode;// useful shorthand
+  typedef BTree<Trait> self;
+  typedef btree_forward_iterator<self> iterator;
+  typedef btree_backward_iterator<self> riterator;
 private:
        mutable mutex m_mutex;
 public:
@@ -72,12 +75,22 @@ public:
        LinkedValueType* FirstThat( Callable fn, Args&& ...args)
        {                return m_Root.FirstThat(fn, 0, args...);          }
 
+       iterator begin(){iterator iter(this, 0); return iter;}
+       iterator end(){updateNodes(); iterator iter(this, m_nodes.size()); return iter;}
+       riterator rbegin(){updateNodes(); riterator iter(this, m_nodes.size() - 1); return iter;}
+       riterator rend(){riterator iter(this, 0); return iter;}
+
+       BTNode* getNode(size_t index){return m_nodes[index];}
+
+       void updateNodes();
+
 protected:
        BTNode          m_Root;
        size_t          m_Height;  // height of tree
        size_t          m_Order;   // order of tree
        size_t          m_NumKeys; // number of keys
        CompareFn       m_compareFn;
+       vector<BTNode *> m_nodes;
        bool            m_Unique;  // Accept the elements only once ?
 };     
 
@@ -122,6 +135,23 @@ void BTree<Trait>::Read(istream& is) {
               is >> value;
               Insert(key, value);
        }
+}
+
+
+template <typename value_type, typename LinkedValueType, typename Node>
+void pushNode(tagObjectInfo<value_type, LinkedValueType> &info, size_t level, vector<Node *> &nodes)
+{
+       Node* node = new Node(info.key, info.value);
+       node->getDataRef() = info.key;
+       node->getValueRef() = info.value;
+       nodes.push_back(node);
+}
+
+template <typename Trait>
+void BTree<Trait>::updateNodes()
+{
+       m_nodes.clear();
+       m_Root.ForEach(&::pushNode<value_type, LinkedValueType, BTNode>, 0, m_nodes);
 }
 
 template <typename Trait>
